@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import './TaskTable.css'; // You can define your CSS for styling
 
 function TaskTable() {
-  const [rows, setRows] = useState(Array(5).fill({ time: '', task: '', goal: '' }));
+  const initialRows = Array(5).fill({ time: '', task: '', goal: '' });
+
+  const [rows, setRows] = useState(initialRows);
 
   const handleRowChange = (index, field, value) => {
     const updatedRows = [...rows];
-    updatedRows[index][field] = value;
+    updatedRows[index] = {
+      ...updatedRows[index],
+      [field]: value,
+    };
     setRows(updatedRows);
   };
 
