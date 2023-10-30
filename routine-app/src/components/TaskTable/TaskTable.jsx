@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './TaskTable.css'; // You can define your CSS for styling
 
-function TaskTable() {
-  const initialRows = Array(5).fill({ time: '', task: '', goal: '' });
+function TaskTable(props) {
+  // const initialRows = Array(5).fill({ time: '', task: '', goal: '' });
 
-  const [rows, setRows] = useState(initialRows);
-
+  // const [rows, setRows] = useState(initialRows);
+  const rows = props.rows
+  const setRows = props.setRows
   const handleRowChange = (index, field, value) => {
     const updatedRows = [...rows];
     updatedRows[index] = {
