@@ -1,24 +1,37 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 function SchedulePage() {
-    const { rows } = useParams();
-    const parsedRows = JSON.parse(rows || "[]"); // Use an empty array as the default value
-    
-  console.log("parsed rows are")
-  console.log(parsedRows);
+  const location = useLocation();
+  
+
+  const state = location.state;
+  const {rows, param2} = location.state
+
+//   const parsedRows = JSON.parse(rows || "[]");
+
   return (
     <div>
       <h1>Your Schedule</h1>
-      <div>
-        {parsedRows.map((row, index) => (
-          <div key={index}>
-            <p>Time: {row.time}</p>
-            <p>Task: {row.task}</p>
-            <p>Goal: {row.goal}</p>
-          </div>
-        ))}
-      </div>
+      <h2>{param2}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Task</th>
+            <th>Goal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <td>{row.time}</td>
+              <td>{row.task}</td>
+              <td>{row.goal}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
