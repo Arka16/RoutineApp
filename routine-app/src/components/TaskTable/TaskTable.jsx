@@ -67,9 +67,9 @@ function TaskTable() {
         </table>
       </div>
       <button onClick={handleAddRow}>Add Row</button>
-      {rows.length > 5 && (
-        <button onClick={() => handleDeleteRow(rows.length - 1)}>Delete Last Row</button>
-      )}
+    
+      <button onClick={() => handleDeleteRow(rows.length - 1)}>Delete Row</button>
+      
     </div>
   );
 }
