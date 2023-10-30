@@ -27,35 +27,49 @@ function TaskTable() {
 
   return (
     <div>
-      <div className="task-table">
-        {rows.map((row, index) => (
-          <div key={index} className="task-row">
-            <input
-              className="task-cell"
-              type="text"
-              value={row.time}
-              placeholder="Time"
-              onChange={(e) => handleRowChange(index, 'time', e.target.value)}
-            />
-            <input
-              className="task-cell"
-              type="text"
-              value={row.task}
-              placeholder="Task"
-              onChange={(e) => handleRowChange(index, 'task', e.target.value)}
-            />
-            <input
-              className="task-cell"
-              type="text"
-              value={row.goal}
-              placeholder="Goal"
-              onChange={(e) => handleRowChange(index, 'goal', e.target.value)}
-            />
-            <button onClick={() => handleDeleteRow(index)}>Delete</button>
-          </div>
-        ))}
+
+      <div className="table-container">
+        <table className="task-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Task</th>
+              <th>Goal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="time"
+                    value={row.time}
+                    onChange={(e) => handleRowChange(index, 'time', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={row.task}
+                    onChange={(e) => handleRowChange(index, 'task', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={row.goal}
+                    onChange={(e) => handleRowChange(index, 'goal', e.target.value)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <button onClick={handleAddRow}>Add Row</button>
+      {rows.length > 5 && (
+        <button onClick={() => handleDeleteRow(rows.length - 1)}>Delete Last Row</button>
+      )}
     </div>
   );
 }
