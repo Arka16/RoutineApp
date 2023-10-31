@@ -20,11 +20,7 @@ function TaskTable(props) {
     setRows([...rows, { time: '', task: '', goal: '' }]);
   };
 
-  const handleDeleteRow = (index) => {
-    const updatedRows = [...rows];
-    updatedRows.splice(index, 1);
-    setRows(updatedRows);
-  };
+  
 
   return (
     <div>
@@ -69,7 +65,7 @@ function TaskTable(props) {
       </div>
       <button onClick={handleAddRow}>Add Row</button>
     
-      <button onClick={() => handleDeleteRow(rows.length - 1)}>Delete Row</button>
+      <button onClick={() => props.handleDeleteRow(rows.length - 1)}>Delete Row</button>
       
     </div>
   );
