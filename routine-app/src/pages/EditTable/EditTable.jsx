@@ -4,6 +4,11 @@ import { useLocation} from "react-router-dom";
 import TaskTable from "../../components/TaskTable/TaskTable";
 import { useState } from "react";
 import Warnings from "../../components/Warnings/Warnings";
+import Alert from "../../components/Alert/Alert";
+
+
+import "./EditTable.css"
+
 function EditTable(props){
     const location = useLocation();
     const navigation = useNavigate();
@@ -12,6 +17,7 @@ function EditTable(props){
     const [dtWarning, setDtWarning] = useState(false)
     const [showFilledWarning, setShowFilledWarning] = useState(false)
     const [createButtonClicked, setCreateButtonClicked] = useState(false)
+    const [backClicked, setBackClicked] = useState(false)
     const handleDeleteRow = (index) => {
         if (newRows.length > 1){
           const updatedRows = [...newRows];
@@ -23,7 +29,21 @@ function EditTable(props){
         }
         
       };
-  
+      
+
+      function goBack() {
+        window.alert("This is a simple alert!");
+        setBackClicked(true);
+        setTimeout(() => {
+          navigation("/schedule", {
+            state: {
+              rows: rows,
+            },
+          });
+        }, 1000); // Delay for 1 second (adjust as needed)
+      }
+
+      
       function closeFilledWarning(){
         setShowFilledWarning(false)
       }
@@ -53,8 +73,15 @@ function EditTable(props){
     return (
     <div>
     <h1> Edit Table </h1>
+    {backClicked && <Alert/>}
     <TaskTable rows={newRows} setRows={setNewRows} handleDeleteRow = {handleDeleteRow} /> 
-    <button onClick={handleCreateTable} className="createTableButton"> Create Time Table </button> 
+    <div className="botton-container">
+
+    <button onClick={goBack} className="backButton"> Back </button> 
+    <button onClick={handleCreateTable} className="createTableButton"> Create Time Table </button>     
+
+    </div>
+    
     <Warnings 
         showFilledWarning = {showFilledWarning}
         createButtonClicked = {createButtonClicked}
