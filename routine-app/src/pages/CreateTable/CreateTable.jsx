@@ -2,14 +2,14 @@ import React, {useState} from "react";
 import TaskTable from "../../components/TaskTable/TaskTable";
 import './CreateTable.css';
 import { useNavigate } from 'react-router-dom';
-
+import Warnings from "../../components/Warnings/Warnings";
 function CreateTable(){
-    const initialRows = Array(5).fill({ time: '', task: '', goal: '' });
+    const startingNum = 1
+    const initialRows = Array(startingNum).fill({ time: '', task: '', goal: '' });
     const [rows, setRows] = useState(initialRows);
     const [createButtonClicked, setCreateButtonClicked] = useState(false)
     const [dtWarning, setDtWarning] = useState(false)
-    console.log("Row is: ")
-    console.log(rows)
+  
     const navigation = useNavigate();
     const [showFilledWarning, setShowFilledWarning] = useState(false)
     
@@ -45,7 +45,7 @@ function CreateTable(){
         if(filled){
           navigation("/schedule",  {
             state: {
-              rows
+              rows: rows,
             },
           });
         }
@@ -56,17 +56,13 @@ function CreateTable(){
              <h1> Enter your Schedule Below </h1>
              <TaskTable rows={rows} setRows={setRows} handleDeleteRow = {handleDeleteRow} /> 
             <button onClick={handleCreateTable} className="createTableButton"> Create Time Table </button> 
-            {showFilledWarning && createButtonClicked &&
-             <div className="warning">
-              <button onClick={closeFilledWarning} className= "warning-button"> close </button>
-              <p className="warningText"> Warning: All entries on table must be filled! </p>
-              </div>}
-              {dtWarning && 
-              <div  className="warning">
-              <button onClick={closeDeleteWarning} className= "warning-button"> close </button>
-              <p className="warningText"> Warning: Table must have atleast one row! </p>
-              </div>
-              }
+            <Warnings 
+             showFilledWarning = {showFilledWarning}
+             createButtonClicked = {createButtonClicked}
+             closeFilledWarning = {closeFilledWarning}
+             dtWarning = {dtWarning}
+             closeDeleteWarning = {closeDeleteWarning}
+             />
             </div>
             );
 }
