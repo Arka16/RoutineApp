@@ -1,16 +1,19 @@
-
 .button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px; 
+    margin-top: 20px;
   }
-
-  .backButton{
-    display: flex;
+  
+  .backButton,
+  .finishEditButton {
+    display: inline-block;
     width: 150px; /* Adjust the width as needed */
     height: 50px; /* Adjust the height as needed */
     padding: 10px 20px; /* Adjust padding for internal spacing */
     font-size: 16px;
-    margin-left: 700px;
-
+    vertical-align: middle; /* Align buttons vertically */
   }
+
+.backButton{
+    margin-left: 35%;
+    margin-right: 30px;
+}
+

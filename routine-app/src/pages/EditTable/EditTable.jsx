@@ -18,6 +18,9 @@ function EditTable(props){
     const [showFilledWarning, setShowFilledWarning] = useState(false)
     const [createButtonClicked, setCreateButtonClicked] = useState(false)
     const [backClicked, setBackClicked] = useState(false)
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
     const handleDeleteRow = (index) => {
         if (newRows.length > 1){
           const updatedRows = [...newRows];
@@ -29,18 +32,30 @@ function EditTable(props){
         }
         
       };
-      
 
-      function goBack() {
-        window.alert("This is a simple alert!");
-        setBackClicked(true);
-        setTimeout(() => {
-          navigation("/schedule", {
+      const handleCancel = () => {
+        setIsDialogOpen(false); // Close the dialog
+      };
+    
+      const handleOK = () => {
+        setIsDialogOpen(false); 
+        navigation("/schedule", {
             state: {
               rows: rows,
             },
           });
-        }, 1000); // Delay for 1 second (adjust as needed)
+      };
+    
+      const showCustomDialog = () => {
+        setIsDialogOpen(true);
+      };
+      
+
+      function goBack() {
+          setBackClicked(true)
+          setIsDialogOpen(true)
+           
+      
       }
 
       
@@ -73,12 +88,16 @@ function EditTable(props){
     return (
     <div>
     <h1> Edit Table </h1>
-    {backClicked && <Alert/>}
-    <TaskTable rows={newRows} setRows={setNewRows} handleDeleteRow = {handleDeleteRow} /> 
+    {backClicked && isDialogOpen && <Alert 
+          message="Warning: Your changes won't be saved. Are you sure you want to go back?"
+          onCancel={handleCancel}
+          onOK={handleOK}
+          />}
+   <TaskTable rows={newRows} setRows={setNewRows} handleDeleteRow = {handleDeleteRow} /> 
     <div className="botton-container">
 
     <button onClick={goBack} className="backButton"> Back </button> 
-    <button onClick={handleCreateTable} className="createTableButton"> Create Time Table </button>     
+    <button onClick={handleCreateTable} className="finishEditButton"> Finish Editing </button>     
 
     </div>
     

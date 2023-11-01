@@ -1,16 +1,14 @@
 import React from "react";
-function Alert() {
-    const showAlert = () => {
-      window.alert("This is a simple alert!");
-    };
-  
-    return (
-      <div>
-        <button onClick={showAlert}>Show Alert</button>
-      </div>
-    );
-  }
 
+function Alert({ message, onCancel, onOK }) {
+  return (
+    <div className="custom-dialog">
+      <p>{message}</p>
+      <button onClick={onCancel}>Cancel</button>
+      <button onClick={onOK}>OK</button>
+    </div>
+  );
+}
 
-  export default Alert
+export default Alert
   
