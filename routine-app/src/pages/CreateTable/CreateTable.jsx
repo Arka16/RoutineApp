@@ -3,7 +3,12 @@ import TaskTable from "../../components/TaskTable/TaskTable";
 import './CreateTable.css';
 import { useNavigate } from 'react-router-dom';
 import Warnings from "../../components/Warnings/Warnings";
+import axios from 'axios';
+
+
+
 function CreateTable(){
+    const URL = "http://localhost:3000";
     const startingNum = 1
     const initialRows = Array(startingNum).fill({ time: '', task: '', goal: '' });
     const [rows, setRows] = useState(initialRows);
@@ -33,7 +38,7 @@ function CreateTable(){
     function closeDeleteWarning(){
       setDtWarning(false)
     }
-    function handleCreateTable(){
+    async function handleCreateTable(){
       setCreateButtonClicked(true)
        var filled = true;
         rows.forEach((item) => {
@@ -43,11 +48,22 @@ function CreateTable(){
           }
         })
         if(filled){
-          navigation("/schedule",  {
-            state: {
-              rows: rows,
-            },
-          });
+          // Make a POST request to your backend API
+          try{
+            const response = await axios.post(URL + "/create-table", rows); 
+            console.log(response.status)
+            console.log('Response from the server:', response.data);
+            navigation("/schedule",  {
+              state: {
+                rows: rows,
+              },
+            });
+
+          }
+          catch (error) {
+            console.error('Error:', error);
+          }
+         
         }
         
     }

@@ -40,6 +40,7 @@ function TaskTable(props) {
                 <td>
                   <input
                     type="time"
+                    placeholder='10:00 AM'
                     value={row.time}
                     onChange={(e) => handleRowChange(index, 'time', e.target.value)}
                   />
@@ -48,6 +49,7 @@ function TaskTable(props) {
                   <input
                     type="text"
                     value={row.task}
+                    placeholder= {index === 0 ? 'Interview Prep' : ""}
                     onChange={(e) => handleRowChange(index, 'task', e.target.value)}
                   />
                 </td>
@@ -55,6 +57,7 @@ function TaskTable(props) {
                   <input
                     type="text"
                     value={row.goal}
+                    placeholder= {index === 0 ? 'Prepare the answers of 3 questions' : ""}
                     onChange={(e) => handleRowChange(index, 'goal', e.target.value)}
                   />
                 </td>
