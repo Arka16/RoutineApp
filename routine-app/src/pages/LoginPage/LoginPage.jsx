@@ -1,13 +1,43 @@
-import React, { useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 function LoginPage() {
   const navigation = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [id, setId] = useState('')
+  const [userExists, setUserExists] = useState(false)
+
+  const URL = "http://localhost:3000"
   
+  const fetchData = async () => {
+    try{
+      const response = await axios.get(URL + "/get-user/" + username);
+      console.log("RES")
+      console.log(response.data.id)
+      if (response){
+        if (response.status === 200){
+          setUserExists(true);
+          setId(response.data.id)
+        }     
+        else{
+          setUserExists(false);
+
+        }
+           
+      }
+      
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  } )
   const handleLogin = (e) => {
     e.preventDefault();
     
@@ -19,7 +49,15 @@ function LoginPage() {
     } else {
       setMessage('Invalid username or password');
     }
-    navigation("/createTable");
+    if(userExists){
+      navigation("/schedule", {
+        state: {
+          id: id
+        },
+    });
+
+    }
+   
   }
 
   return (

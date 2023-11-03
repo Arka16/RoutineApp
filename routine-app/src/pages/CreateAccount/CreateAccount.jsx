@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import './CreateAccount.css'
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 function CreateAccount(){
 
     const navigation = useNavigate();
@@ -12,8 +12,11 @@ function CreateAccount(){
     const [password, setPassword] = useState('');
     const [repassword, setRepassword] = useState('');
     const [message, setMessage] = useState('');
+    const URL = "http://localhost:3000";
+
     
-    const handleLogin = (e) => {
+
+    async function handleLogin(e) {
       e.preventDefault();
       
       // You can add your authentication logic here.
@@ -24,7 +27,29 @@ function CreateAccount(){
       } else {
         setMessage('Invalid username or password');
       }
-      navigation("/createTable");
+      try{
+        const data = {
+            user_id: "001",
+            name: name,
+            username: username,
+            password: password,
+            email: email,
+            phoneNumber: phoneNumber,
+        }
+        const response = await axios.post(URL + "/create-account", data); 
+        console.log(response.status)
+        console.log('Response from the server:', response.data);
+        navigation("/createTable", {
+            state: {
+                id: response.data._id
+              },
+        });
+
+      }
+      catch(error){
+        console.log(error)
+      }
+      
     }
 
 

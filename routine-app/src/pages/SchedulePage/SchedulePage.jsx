@@ -1,17 +1,41 @@
 import React from "react";
 import { useLocation} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
 function SchedulePage() {
   const location = useLocation();
   const navigation = useNavigate();
-  const {rows} = location.state
+  const [data, setData] = useState([])
+  const {rows, id} = location.state
+
+  const URL = "http://localhost:3000"
+  
+  const fetchData = async () => {
+    try{
+      const response = await axios.get(URL + "/get-data/" + id);
+      console.log("TABLE");
+      console.log(response.data.data.table);
+      setData(response.data.data.table)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  } )
+
+
+ 
   function handleEditTable(){
     navigation("/edit",  {
       state: {
-        rows
+        rows,
+        id
       },
     });
   }
@@ -27,7 +51,7 @@ function SchedulePage() {
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => {
+          {data.map((row, index) => {
               const timeParts = row.time.split(':');
               const hour = parseInt(timeParts[0]);
               const minute = parseInt(timeParts[1]);

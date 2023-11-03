@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import TaskTable from "../../components/TaskTable/TaskTable";
 import './CreateTable.css';
 import { useNavigate } from 'react-router-dom';
+import { useLocation} from "react-router-dom";
 import Warnings from "../../components/Warnings/Warnings";
 import axios from 'axios';
 
@@ -16,6 +17,7 @@ function CreateTable(){
     const [dtWarning, setDtWarning] = useState(false)
   
     const navigation = useNavigate();
+    const location = useLocation();
     const [showFilledWarning, setShowFilledWarning] = useState(false)
     
 
@@ -50,12 +52,15 @@ function CreateTable(){
         if(filled){
           // Make a POST request to your backend API
           try{
-            const response = await axios.post(URL + "/create-table", rows); 
+            const {id} = location.state
+            console.log(id)
+            const response = await axios.post(URL + "/create-table", {id, rows}); 
             console.log(response.status)
-            console.log('Response from the server:', response.data);
+            console.log('Response from the server:', response.data); 
             navigation("/schedule",  {
               state: {
                 rows: rows,
+                id: id
               },
             });
 
