@@ -1,0 +1,54 @@
+/* Add this to your CSS file or style block in your component */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    background-color: #f8f8f8; /* Background color for the dropdown */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+  }
+  
+  .dropdown-toggle {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* Position the menu below the button */
+    left: 0;
+    border: 1px solid #ccc;
+    background-color: white;
+    z-index: 1;
+  }
+  
+  /* Apply flexbox to make menu items stack vertically */
+  .dropdown.show .dropdown-menu {
+    display: block;
+    flex-direction: column;
+    width: 100%; /* Set the width to the same as the parent container */
+    border: none; /* Remove the border to separate items visually */
+  }
+  
+  /* Style the "Log Out" option and other menu items */
+  .dropdown-item {
+    display: flex;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center; /* Center text within menu items */
+    text-decoration: none;
+    color: #333; /* Text color */
+    transition: background-color 0.3s; /* Add a transition effect for hover */
+  }
+  
+  /* Change the background color on hover */
+  .dropdown-item:hover {
+    background-color: #dcdcdc;
+  }
+  
+  /* Add more styling as needed */
+  

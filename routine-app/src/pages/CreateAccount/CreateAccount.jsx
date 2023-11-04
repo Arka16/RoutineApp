@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import './CreateAccount.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 function CreateAccount(){
 
     const navigation = useNavigate();
@@ -55,6 +56,7 @@ function CreateAccount(){
 
     return (
         <div className="login-container">
+    
       <form className="login-form" onSubmit={handleLogin}>
         <h1>Create Account </h1>
         <label htmlFor="Name">Name :</label>
@@ -101,7 +103,7 @@ function CreateAccount(){
           onChange={(e) => setRepassword(e.target.value)}
         />
         <button className='CreateAccountButton' type="submit">Create Account</button>
-        <button onClick = {()=> navigation("/LogIn")}> Already Logged in? Click here </button>
+        <a onClick = {()=> navigation("/LogIn")}> Already Registered? Click here </a>
         <p className="message">{message}</p>
       </form>
     </div>

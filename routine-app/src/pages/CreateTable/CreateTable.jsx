@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation} from "react-router-dom";
 import Warnings from "../../components/Warnings/Warnings";
 import axios from 'axios';
-
+import Settings from "../../components/Settings/Settings";
 
 
 function CreateTable(){
@@ -74,6 +74,7 @@ function CreateTable(){
     }
     return (
             <div>
+             <Settings/>
              <h1> Enter your Schedule Below </h1>
              <TaskTable rows={rows} setRows={setRows} handleDeleteRow = {handleDeleteRow} /> 
             <button onClick={handleCreateTable} className="createTableButton"> Create Time Table </button> 

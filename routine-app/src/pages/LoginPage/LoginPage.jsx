@@ -79,6 +79,7 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button className='LoginButton' type="submit">Login</button>
+        <a onClick = {()=> navigation("/")}> Not registered? Click here to Create a new account </a>
         <p className="message">{message}</p>
       </form>
     </div>

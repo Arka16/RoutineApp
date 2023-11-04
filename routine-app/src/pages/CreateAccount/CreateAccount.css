@@ -1,0 +1,21 @@
+a {
+    color: blue;
+    font-size: 12px;
+    margin-left: 15%;
+    text-decoration: none; /* Remove the default underline */
+    transition: color 0.3s; /* Smooth transition for color change */
+  }
+  
+  /* Change text color and add underline on hover */
+  a:hover {
+    color: darkblue; /* Darker shade of blue on hover */
+    text-decoration: underline; /* Add underline on hover */
+    cursor: pointer;
+  }
+  
+  .CreateAccountButton{
+    width: 100%;
+    margin-top: 10%;
+    padding: 10px;
+    cursor: pointer;
+  }

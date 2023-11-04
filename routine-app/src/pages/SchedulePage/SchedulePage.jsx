@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
+import Settings from "../../components/Settings/Settings";
 import axios from "axios";
 
 
@@ -41,6 +42,7 @@ function SchedulePage() {
   }
   return (
     <div>
+      <Settings/>
       <h1>Your Schedule</h1>
       <table className="task-table">
         <thead>

@@ -6,7 +6,7 @@ import { useState } from "react";
 import Warnings from "../../components/Warnings/Warnings";
 import Alert from "../../components/Alert/Alert";
 import axios from "axios";
-
+import Settings from "../../components/Settings/Settings";
 import "./EditTable.css"
 
 function EditTable(props){
@@ -92,6 +92,7 @@ function EditTable(props){
 
     return (
     <div>
+      <Settings/>
     <h1> Edit Table </h1>
     {backClicked && isDialogOpen && <Alert 
           message="Warning: Your changes won't be saved. Are you sure you want to go back?"

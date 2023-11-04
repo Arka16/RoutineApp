@@ -49,3 +49,9 @@
     margin-top: 10px;
   }
   
+
+  a{
+    display: flex;
+    font-size: 6px;
+    margin-top: 10%;
+  }
