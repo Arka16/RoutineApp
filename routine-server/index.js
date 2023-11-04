@@ -103,7 +103,7 @@ app.post("/create-account", async(req, res) => {
     }
    
 })
-app.post("/create-table", async (req, res) => {
+app.post("/create-table/:id", async (req, res) => {
     console.log("hi");
     console.log(req.body);
 
@@ -111,7 +111,7 @@ app.post("/create-table", async (req, res) => {
         console.log(req.body)
         console.log("In try")
         const updatedDataModel = await DataModel.findByIdAndUpdate(
-          req.body.id,
+          req.params.id,
           { $set: { table: req.body.rows } }, // Use $set to update the field
           { new: true } // To return the updated document
         );
@@ -128,6 +128,36 @@ app.post("/create-table", async (req, res) => {
         res.status(500).json({ error: 'Failed to save data.' });
     }
 });
+
+//updating a schedule
+app.put("/table/:id",  async (req, res) => {
+  console.log("IN PUT");
+  console.log(req.body);
+
+  try {
+      console.log(req.body)
+      console.log("NEW ROWAS")
+      console.log(req.body.newRows)
+      console.log("In try")
+      const updatedDataModel = await DataModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: { table: req.body.newRows } }, // Use $set to update the field
+        { new: true } // To return the updated document
+      );
+
+      if (!updatedDataModel) {
+        return res.status(404).json({ error: "Data model not found" });
+      }
+      console.log("After Update");
+      console.log(updatedDataModel)
+      res.status(201).json({ message: 'Data saved successfully.', updatedDataModel });
+  } catch (err) {
+      console.log(req.body)
+      console.error(err);
+      res.status(500).json({ error: 'Failed to save data.' });
+  }
+
+}); 
 
 
 // Start the server
