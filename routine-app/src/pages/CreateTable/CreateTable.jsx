@@ -10,7 +10,7 @@ import axios from 'axios';
 
 function CreateTable(){
     const URL = "http://localhost:3000";
-    const startingNum = 1
+    const startingNum = 5
     const initialRows = Array(startingNum).fill({ time: '', task: '', goal: '' });
     const [rows, setRows] = useState(initialRows);
     const [createButtonClicked, setCreateButtonClicked] = useState(false)
@@ -54,7 +54,7 @@ function CreateTable(){
           try{
             const {id} = location.state
             console.log(id)
-            const response = await axios.post(URL + "/create-table", {id, rows}); 
+            const response = await axios.post(URL + "/create-table/" + id, {id, rows}); 
             console.log(response.status)
             console.log('Response from the server:', response.data); 
             navigation("/schedule",  {

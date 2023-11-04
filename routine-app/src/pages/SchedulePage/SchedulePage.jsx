@@ -34,7 +34,7 @@ function SchedulePage() {
   function handleEditTable(){
     navigation("/edit",  {
       state: {
-        rows,
+        data,
         id
       },
     });

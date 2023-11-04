@@ -5,20 +5,20 @@ import TaskTable from "../../components/TaskTable/TaskTable";
 import { useState } from "react";
 import Warnings from "../../components/Warnings/Warnings";
 import Alert from "../../components/Alert/Alert";
-
+import axios from "axios";
 
 import "./EditTable.css"
 
 function EditTable(props){
     const location = useLocation();
     const navigation = useNavigate();
-    const {rows} = location.state
-    const [newRows, setNewRows] = useState(rows)
+    const {data, id} = location.state
+    const [newRows, setNewRows] = useState(data)
     const [dtWarning, setDtWarning] = useState(false)
     const [showFilledWarning, setShowFilledWarning] = useState(false)
     const [createButtonClicked, setCreateButtonClicked] = useState(false)
     const [backClicked, setBackClicked] = useState(false)
-
+    const URL = "http://localhost:3000"
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const handleDeleteRow = (index) => {
@@ -41,7 +41,8 @@ function EditTable(props){
         setIsDialogOpen(false); 
         navigation("/schedule", {
             state: {
-              rows: rows,
+              rows: data,
+              id:id
             },
           });
       };
@@ -66,7 +67,7 @@ function EditTable(props){
       function closeDeleteWarning(){
         setDtWarning(false)
       }
-      function handleCreateTable(){
+      async function  handleCreateTable(){
         setCreateButtonClicked(true)
          var filled = true;
           newRows.forEach((item) => {
@@ -76,9 +77,13 @@ function EditTable(props){
             }
           })
           if(filled){
+            console.log(id)
+            console.log(newRows)
+            const response = await axios.put(URL + "/table/" + id, {id, newRows});
             navigation("/schedule",  {
               state: {
                 rows: newRows,
+                id:id
               },
             });
           }
