@@ -33,6 +33,9 @@ function Settings(props) {
           <a className="dropdown-item" href="#logout" onClick={handleLogout}>
             Log Out
           </a>
+          <a className="dropdown-item" href="#logout" onClick={handleLogout}>
+            Delete User
+          </a>
         </div>
       )}
     </div>

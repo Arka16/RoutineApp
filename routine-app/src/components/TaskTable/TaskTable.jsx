@@ -1,6 +1,5 @@
 import React from 'react';
 import './TaskTable.css'; // You can define your CSS for styling
-
 function TaskTable(props) {
   // const initialRows = Array(5).fill({ time: '', task: '', goal: '' });
 

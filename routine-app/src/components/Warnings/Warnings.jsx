@@ -14,6 +14,12 @@ function Warnings(props){
              <p className="warningText"> Warning: Table must have atleast one row! </p>
              </div>
              }
+              {props.showTimeWarning && props.createButtonClicked &&
+             <div  className="warning">
+             <button onClick={props.closeTimeWarning} className= "warning-button"> close </button>
+             <p className="warningText"> Warning: Start times of tasks overlap! </p>
+             </div>
+             }
         </div>
         );
 }
