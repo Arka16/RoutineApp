@@ -1,34 +1,21 @@
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
 const app = express();
 const port = 3000;
 
-mongoose.connect('mongodb+srv://Arka21:Fooler%2321@cluster0.ykznhdg.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb+srv://Arka21:Fooler%2321@cluster0.ykznhdg.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb://localhost:27017/usersDB", {useNewUrlParser: true})
 const db = mongoose.connection;
+const DataModel  = require('./Database');
 
+const tableRoutes = require("./routes/tables")
+const userRoutes = require("./routes/user")
+
+var router = express.Router()
 const userToId = {}
-const dataSchema = new mongoose.Schema({
-    // Define the structure of your data here
-    user_id: String,
-    name: String,
-    username: String,
-    password: String,
-    email: String,
-    phoneNumber: String,
-    table: [
-        {
-          time: String,
-          task: String,
-          goal: String
-        },
-      ]
 
-  });
-
-
-const DataModel = mongoose.model('Data', dataSchema);
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -62,11 +49,11 @@ app.get('/get-user/:username', async (req, res) => {
 });
 
 app.get('/get-data/:id', async (req, res) => {
-  console.log("getting tables")
+  //console.log("getting tables")
   try{
     doc = await DataModel.findById(req.params.id)
     if (doc) {
-      console.log('Found document:', doc);
+      //console.log('Found document:', doc);
       res.status(200).json({data: doc})
     } else {
       res.status(404).json({message: "User not found"})
@@ -159,6 +146,7 @@ app.put("/table/:id",  async (req, res) => {
 
 }); 
 
+app.use("/tables", tableRoutes);
 
 // Start the server
 app.listen(port, () => {
