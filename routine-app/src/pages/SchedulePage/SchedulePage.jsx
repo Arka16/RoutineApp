@@ -17,8 +17,8 @@ function SchedulePage() {
   const fetchData = async () => {
     try{
       const response = await axios.get(URL + "/get-data/" + id);
-      console.log("TABLE");
-      console.log(response.data.data.table);
+      // console.log("TABLE");
+      //onsole.log(response.data.data.table);
       setData(response.data.data.table)
     }
     catch(error){
@@ -40,6 +40,21 @@ function SchedulePage() {
       },
     });
   }
+
+  async function handleDeleteTable(){
+    const request = await axios.put(URL + "/tables/del", {id})
+    if(request.status === 200){
+      navigation("/createTable", {
+        state: {
+          id
+        }
+      });
+    }
+    console.log(request.status)
+    
+  }
+
+
   return (
     <div>
       <Settings/>
@@ -82,6 +97,7 @@ function SchedulePage() {
         </tbody>
       </table>
       <button onClick={handleEditTable} className="editTableButton"> Edit Table </button> 
+      <button onClick={handleDeleteTable} className="editTableButton"> Delete and Create New Table </button> 
     </div>
   );
 }

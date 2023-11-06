@@ -7,6 +7,8 @@ import Warnings from "../../components/Warnings/Warnings";
 import Alert from "../../components/Alert/Alert";
 import axios from "axios";
 import Settings from "../../components/Settings/Settings";
+import {startsBefore} from '../../helper_functions/helper_functions'
+
 import "./EditTable.css"
 
 function EditTable(props){
@@ -20,6 +22,7 @@ function EditTable(props){
     const [backClicked, setBackClicked] = useState(false)
     const URL = "http://localhost:3000"
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [showTimeWarning, setShowTimeWarning] = useState(false)
 
     const handleDeleteRow = (index) => {
         if (newRows.length > 1){
@@ -67,16 +70,31 @@ function EditTable(props){
       function closeDeleteWarning(){
         setDtWarning(false)
       }
+
+      function closeTimeWarning(){
+        setShowTimeWarning(false)
+      }
+
       async function  handleCreateTable(){
-        setCreateButtonClicked(true)
-         var filled = true;
+          setCreateButtonClicked(true)
+          var filled = true;
+          var validTime = true;
+          var recentTime = ""
           newRows.forEach((item) => {
             if (!item.time || !item.task || !item.goal){
               setShowFilledWarning(true)
               filled = false
             }
+            if(item.time && (recentTime !== "" && !startsBefore(recentTime, item.time))){
+              setShowTimeWarning(true)
+              validTime = false
+            }
+            if(item.time){
+              recentTime = item.time;
+            }
           })
-          if(filled){
+          
+          if(filled && validTime){
             console.log(id)
             console.log(newRows)
             const response = await axios.put(URL + "/table/" + id, {id, newRows});
@@ -113,6 +131,8 @@ function EditTable(props){
         closeFilledWarning = {closeFilledWarning}
         dtWarning = {dtWarning}
         closeDeleteWarning = {closeDeleteWarning}
+        closeTimeWarning = {closeTimeWarning}
+        showTimeWarning = {showTimeWarning}
         />
     </div>
     
