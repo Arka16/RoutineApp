@@ -3,65 +3,63 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-// mongoose.connect("mongodb://localhost:27017/usersDB", {useNewUrlParser: true})
-// const db = mongoose.connection;
 const DataModel = require("../Database");
 
 //creating a schedule for the first time
-// router.post("/:id",  async (req, res) => {
-//     console.log("hi");
-//     console.log(req.body);
+router.post("/",  async (req, res) => {
+    console.log("hi");
+    console.log(req.body);
 
-//     try {
-//         console.log(req.body)
-//         console.log("In try")
-//         const updatedDataModel = await DataModel.findByIdAndUpdate(
-//           req.params.id,
-//           { $set: { table: req.body.rows } }, // Use $set to update the field
-//           { new: true } // To return the updated document
-//         );
+    try {
+        console.log(req.body)
+        console.log("In try")
+        const updatedDataModel = await DataModel.findByIdAndUpdate(
+          req.params.id,
+          { $set: { table: req.body.rows } }, // Use $set to update the field
+          { new: true } // To return the updated document
+        );
   
-//         if (!updatedDataModel) {
-//           return res.status(404).json({ error: "Data model not found" });
-//         }
-//         console.log("After Update");
-//         console.log(updatedDataModel)
-//         res.status(201).json({ message: 'Data saved successfully.', updatedDataModel });
-//     } catch (err) {
-//         console.log(req.body)
-//         console.error(err);
-//         res.status(500).json({ error: 'Failed to save data.' });
-//     }
+        if (!updatedDataModel) {
+          return res.status(404).json({ error: "Data model not found" });
+        }
+        console.log("After Update");
+        console.log(updatedDataModel)
+        res.status(201).json({ message: 'Data saved successfully.', updatedDataModel });
+    } catch (err) {
+        console.log(req.body)
+        console.error(err);
+        res.status(500).json({ error: 'Failed to save data.' });
+    }
 
-// }); 
+}); 
 
-// //updating a schedule
-// router.put("/:id",  async (req, res) => {
-//     console.log("hi");
-//     console.log(req.body);
+//updating a schedule
+router.put("/",  async (req, res) => {
+    console.log("hi");
+    console.log(req.body);
 
-//     try {
-//         console.log(req.body)
-//         console.log("In try")
-//         const updatedDataModel = await DataModel.findByIdAndUpdate(
-//           req.params.id,
-//           { $set: { table: req.body.rows } }, // Use $set to update the field
-//           { new: true } // To return the updated document
-//         );
-//         if (!updatedDataModel) {
+    try {
+        console.log(req.body)
+        console.log("In try")
+        const updatedDataModel = await DataModel.findByIdAndUpdate(
+          req.params.id,
+          { $set: { table: req.body.rows } }, // Use $set to update the field
+          { new: true } // To return the updated document
+        );
+        if (!updatedDataModel) {
         
-//           return res.status(404).json({ error: "Data model not found" });
-//         }
-//         console.log("After Delete Table");
-//         console.log(updatedDataModel)
-//         res.status(201).json({ message: 'Data saved successfully.', updatedDataModel });
-//     } catch (err) {
-//         console.log(req.body)
-//         console.error(err);
-//         res.status(500).json({ error: 'Failed to save data.' });
-//     }
+          return res.status(404).json({ error: "Data model not found" });
+        }
+        console.log("After Delete Table");
+        console.log(updatedDataModel)
+        res.status(201).json({ message: 'Data saved successfully.', updatedDataModel });
+    } catch (err) {
+        console.log(req.body)
+        console.error(err);
+        res.status(500).json({ error: 'Failed to save data.' });
+    }
 
-// }); 
+}); 
 
 //deleting a table
 router.put("/del", async (req, res, next)=>{

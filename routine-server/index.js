@@ -148,6 +148,8 @@ app.put("/table/:id",  async (req, res) => {
 
 app.use("/tables", tableRoutes);
 
+app.use("/user", userRoutes);
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

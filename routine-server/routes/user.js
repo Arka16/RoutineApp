@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-
+const DataModel = require("../Database");
 //getting user id
 router.get('/', async (req, res) => {
     console.log("getting user")
@@ -70,6 +70,28 @@ router.post("/", async (req, res) => {
     }
 
 });
+
+router.delete("/", async (req, res, next) => {
+  console.log("DELETING USER")
+  try {
+    console.log("in delete try")
+    console.log(req.body.id)
+    doc = await DataModel.findByIdAndDelete(req.body.id)
+    if(doc){
+      res.status(200).json({message: "User successfully deleted"});
+    }
+    else{
+      console.log("USER NOT FOUND")
+      res.status(404).json({error: "User not found"});
+    }
+    next()
+    
+  } catch (error) {
+    console.log(error.message)
+    res.status(503).json({error: "Internal server error"})
+    
+  }
+})
 
 
 
