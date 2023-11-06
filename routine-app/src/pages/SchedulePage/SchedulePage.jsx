@@ -10,7 +10,7 @@ function SchedulePage() {
   const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState([])
-  const {rows, id} = location.state
+  const {rows, id} = location.state || {}
 
   const URL = "http://localhost:3000"
   
@@ -57,7 +57,7 @@ function SchedulePage() {
 
   return (
     <div>
-      <Settings/>
+      <Settings id = {id}/>
       <h1>Your Schedule</h1>
       <table className="task-table">
         <thead>

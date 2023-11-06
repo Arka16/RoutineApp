@@ -14,7 +14,8 @@ import "./EditTable.css"
 function EditTable(props){
     const location = useLocation();
     const navigation = useNavigate();
-    const {data, id} = location.state
+
+    const {data, id} = location.state | {}
     const [newRows, setNewRows] = useState(data)
     const [dtWarning, setDtWarning] = useState(false)
     const [showFilledWarning, setShowFilledWarning] = useState(false)
@@ -110,7 +111,7 @@ function EditTable(props){
 
     return (
     <div>
-      <Settings/>
+      <Settings id = {id}/>
     <h1> Edit Table </h1>
     {backClicked && isDialogOpen && <Alert 
           message="Warning: Your changes won't be saved. Are you sure you want to go back?"

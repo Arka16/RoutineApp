@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const URL = "http://localhost:3000";
 
 function Settings(props) {
   const navigation = useNavigate();
@@ -11,6 +14,23 @@ function Settings(props) {
 
   function handleLogout() {
     navigation("/LogIn");
+  }
+
+  async function handleDeleteUser(){
+    try {
+      console.log(props.id)
+      const response = await axios.delete(URL + "/user", {
+        data: { id: props.id }, // Use the data property to send the id
+      });
+      
+      if(response.status == 200){
+        navigation("/");
+      } 
+    } catch (error) {
+      console.log(error.message)
+      
+    }
+   
   }
 
   return (
@@ -33,7 +53,7 @@ function Settings(props) {
           <a className="dropdown-item" href="#logout" onClick={handleLogout}>
             Log Out
           </a>
-          <a className="dropdown-item" href="#logout" onClick={handleLogout}>
+          <a className="dropdown-item" href="#logout" onClick={handleDeleteUser}>
             Delete User
           </a>
         </div>
