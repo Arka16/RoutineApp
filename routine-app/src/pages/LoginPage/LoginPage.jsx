@@ -47,11 +47,21 @@ function LoginPage() {
     
     const response = await axios.post(URL + "/user/login", {username, password})
     if(response.data.username){
-      navigation("/schedule", {
-        state: {
-          username: username
-        },
-    });
+      if(response.data.tableExists){
+        navigation("/schedule", { 
+          state: {
+            username: username
+          },
+      })
+
+      }
+      else{
+        navigation("/createTable", {
+          state: {
+            username: username
+          },
+      })
+      }
 
     }
 

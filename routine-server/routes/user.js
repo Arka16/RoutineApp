@@ -1,4 +1,4 @@
-// users.js
+// users.js: handling routes for creating, logging in, and deleting user
 const express = require('express');
 const router = express.Router();
 
@@ -24,28 +24,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-//getting user data
-router.get('/:id', async(req, res) => {
-  // Handle user details
-  console.log("getting tables")
-  try{
-    doc = await DataModel.findOne(req.body.username)
-    if (doc) {
-      console.log('Found document:', doc);
-      res.status(200).json({data: doc})
-    } else {
-      res.status(404).json({message: "User not found"})
-    }
 
-  }
-  catch(err){
-    console.error('Error:', err);
-
-  }
-});
-
-
-//creating user
+//creating user for the first time
 router.post("/", async (req, res) => {
     console.log("account info entered");
     console.log(req.body)
@@ -69,6 +49,7 @@ router.post("/", async (req, res) => {
 
 });
 
+//user logging in, lets user in if correct password is entered
 router.post("/login", async (req, res, next) => {
   console.log("getting user in POST enpoint")
   console.log(req.body)
@@ -88,7 +69,7 @@ router.post("/login", async (req, res, next) => {
       console.log("ASDFADSFDS")
       res.json({message: "Invalid username or password"})
     } else {
-      res.status(200).json({username: req.body.username})
+      res.status(200).json({username: req.body.username, tableExists: (doc.table.length != 0)})
       
     }
 
@@ -100,6 +81,7 @@ router.post("/login", async (req, res, next) => {
   next()
 })
 
+//deleting a user
 router.delete("/", async (req, res, next) => {
   console.log("DELETING USER")
   try {
