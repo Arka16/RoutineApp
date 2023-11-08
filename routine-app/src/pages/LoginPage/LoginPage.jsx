@@ -15,7 +15,7 @@ function LoginPage() {
   const fetchData = async () => {
     try{
       const response = await axios.get(URL + "/get-user/" + username, {
-        params: { password: password }});
+      params: { password: password }});
       console.log("RES")
       console.log(response.data.id)
       console.log("RES STATUS")
@@ -42,6 +42,16 @@ function LoginPage() {
   // useEffect(() => {
   //   fetchData();
   // } )
+
+  function handleInputChange(e){
+     setMessage("")
+     if(e.target.id === "username"){
+      setUsername(e.target.value)
+     }
+     else{
+      setPassword(e.target.value)
+     }
+  }
   const handleLogin = async (e) => {
     e.preventDefault();
     
@@ -66,7 +76,7 @@ function LoginPage() {
     }
 
     else {
-      setMessage(response.data.message);
+      setMessage(response.data['message']);
     }
    
   }
@@ -80,14 +90,14 @@ function LoginPage() {
           type="text"
           id="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={handleInputChange}
         />
         <label htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handleInputChange }
         />
         <button className='LoginButton' type="submit">Login</button>
         <a onClick = {()=> navigation("/")}> Not registered? Click here to Create a new account </a>

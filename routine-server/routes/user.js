@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 
 });
 
-//user logging in, lets user in if correct password is entered
+//user logging in, lets user in if correct password is entered or if user exists
 router.post("/login", async (req, res, next) => {
   console.log("getting user in POST enpoint")
   console.log(req.body)
@@ -61,15 +61,22 @@ router.post("/login", async (req, res, next) => {
     doc = await DataModel.findOne({username: req.body.username})
     console.log("DOC IS")
     console.log(doc)
+    const data = {}
     if(doc){
-      console.log(doc.password)
+      data["message1"] = "Username already exists"
 
     }
+
     if (!doc || doc.password !== req.body.password) {
       console.log("ASDFADSFDS")
-      res.json({message: "Invalid username or password"})
-    } else {
-      res.status(200).json({username: req.body.username, tableExists: (doc.table.length != 0)})
+      data["message"] = "Invalid username or password"
+      console.log(data)
+      res.json(data)
+    } 
+  
+    
+    else {
+      res.status(200).json({"message1" : "Username already exists", username: req.body.username, tableExists: (doc.table.length != 0)})
       
     }
 

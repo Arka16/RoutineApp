@@ -13,42 +13,64 @@ function CreateAccount(){
     const [password, setPassword] = useState('');
     const [repassword, setRepassword] = useState('');
     const [message, setMessage] = useState('');
+    const [passwordMessage, setPasswordMessage] = useState('')
     const URL = "http://localhost:3000";
 
-    
+    function handleRepeatChange(e){
+      setRepassword(e.target.value)
+      if(password && e.target.value && e.target.value !== password){
+        setPasswordMessage("Passwords don't match!")
+      }
+      else{
+        setPasswordMessage("")
+      }
+    }
+
+    function handlePasswordChange(e){
+      setPassword(e.target.value)
+      if(repassword && e.target.value && e.target.value !== repassword){
+        setPasswordMessage("Passwords don't match!")
+      }
+     
+     
+    }
 
     async function handleLogin(e) {
       e.preventDefault();
+      const response = await axios.post(URL + "/user/login", {username, password})
       
-      // You can add your authentication logic here.
-      // For this example, let's consider a simple username and password.
-      
-      // if (username === 'demo' && password === 'password') {
-      //   setMessage('Login successful');
-      // } else {
-      //   setMessage('Invalid username or password');
-      // }
-      try{
-        const data = {
-            user_id: "001",
-            name: name,
-            username: username,
-            password: password,
-            email: email,
-            phoneNumber: phoneNumber,
-        }
-        const response = await axios.post(URL + "/user", data); 
-        console.log(response.status)
-        console.log('Response from the server:', response.data);
-        navigation("/createTable", {
-            state: {
-                username: username
-              },
-        });
-
+      if(!name || !username || !password || !email || !phoneNumber || password !== repassword){
+        setMessage("Not all entries filled")
       }
-      catch(error){
-        console.log(error)
+      else if(response.data['message1']){
+        setMessage(response.data['message1'])
+      }
+      
+      else{
+
+      
+        try{
+        
+          const data = {
+              name: name,
+              username: username,
+              password: password,
+              email: email,
+              phoneNumber: phoneNumber,
+          }
+          const response = await axios.post(URL + "/user", data); 
+          console.log(response.status)
+          console.log('Response from the server:', response.data);
+          navigation("/createTable", {
+              state: {
+                  username: username
+                },
+          });
+
+        }
+        catch(error){
+          console.log(error)
+        }
       }
       
     }
@@ -93,15 +115,16 @@ function CreateAccount(){
           type="password"
           id="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
         />
          <label htmlFor="password"> Reenter Password:</label>
         <input
           type="password"
           id="password"
           value={repassword}
-          onChange={(e) => setRepassword(e.target.value)}
+          onChange={handleRepeatChange}
         />
+        <p className="message"> {passwordMessage} </p>
         <button className='CreateAccountButton' type="submit">Create Account</button>
         <a onClick = {()=> navigation("/LogIn")}> Already Registered? Click here </a>
         <p className="message">{message}</p>
