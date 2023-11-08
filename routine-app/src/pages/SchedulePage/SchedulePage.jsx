@@ -10,13 +10,14 @@ function SchedulePage() {
   const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState([])
-  const {rows, id} = location.state || {}
+  const {rows, username} = location.state || {}
 
   const URL = "http://localhost:3000"
   
   const fetchData = async () => {
     try{
-      const response = await axios.get(URL + "/get-data/" + id);
+      const response = await axios.get(URL + "/tables/" + username);
+      console.log(response)
       // console.log("TABLE");
       //onsole.log(response.data.data.table);
       setData(response.data.data.table)
@@ -33,20 +34,22 @@ function SchedulePage() {
 
  
   function handleEditTable(){
+    console.log("DATA IN SCHEDUE IS")
+    console.log(data)
     navigation("/edit",  {
       state: {
         data,
-        id
+        username
       },
     });
   }
 
   async function handleDeleteTable(){
-    const request = await axios.put(URL + "/tables/del", {id})
+    const request = await axios.put(URL + "/tables/del", {username})
     if(request.status === 200){
       navigation("/createTable", {
         state: {
-          id
+          username
         }
       });
     }
@@ -57,7 +60,7 @@ function SchedulePage() {
 
   return (
     <div>
-      <Settings id = {id}/>
+      <Settings username = {username}/>
       <h1>Your Schedule</h1>
       <table className="task-table">
         <thead>

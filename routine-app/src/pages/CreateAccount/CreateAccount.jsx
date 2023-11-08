@@ -23,11 +23,11 @@ function CreateAccount(){
       // You can add your authentication logic here.
       // For this example, let's consider a simple username and password.
       
-      if (username === 'demo' && password === 'password') {
-        setMessage('Login successful');
-      } else {
-        setMessage('Invalid username or password');
-      }
+      // if (username === 'demo' && password === 'password') {
+      //   setMessage('Login successful');
+      // } else {
+      //   setMessage('Invalid username or password');
+      // }
       try{
         const data = {
             user_id: "001",
@@ -37,12 +37,12 @@ function CreateAccount(){
             email: email,
             phoneNumber: phoneNumber,
         }
-        const response = await axios.post(URL + "/create-account", data); 
+        const response = await axios.post(URL + "/user", data); 
         console.log(response.status)
         console.log('Response from the server:', response.data);
         navigation("/createTable", {
             state: {
-                id: response.data._id
+                username: username
               },
         });
 

@@ -18,9 +18,9 @@ function Settings(props) {
 
   async function handleDeleteUser(){
     try {
-      console.log(props.id)
+      console.log(props.username)
       const response = await axios.delete(URL + "/user", {
-        data: { id: props.id }, // Use the data property to send the id
+        data: { username: props.username }, // Use the data property to send the id
       });
       
       if(response.status == 200){

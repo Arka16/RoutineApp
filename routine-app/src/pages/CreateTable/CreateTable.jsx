@@ -19,7 +19,7 @@ function CreateTable(){
     const location = useLocation();
     const [showFilledWarning, setShowFilledWarning] = useState(false)
     const [showTimeWarning, setShowTimeWarning] = useState(false)
-    const { id } = location.state || {};
+    const { username } = location.state || {};
 
     const handleDeleteRow = (index) => {
       if (rows.length > 1){
@@ -67,13 +67,14 @@ function CreateTable(){
           try{
             
             // console.log(id)
-            const response = await axios.post(URL + "/create-table/" + id, {id, rows}); 
+            console.log("USERNAME IS" + username)
+            const response = await axios.post(URL + "/tables", {username, rows}); 
             console.log(response.status)
             console.log('Response from the server:', response.data); 
             navigation("/schedule",  {
               state: {
                 rows: rows,
-                id: id
+                username: username
               },
             });
 
@@ -87,7 +88,7 @@ function CreateTable(){
     }
     return (
             <div>
-             <Settings id = {id}/>
+             <Settings username = {username}/>
              <h1> Enter your Schedule Below </h1>
              <TaskTable rows={rows} setRows={setRows} handleDeleteRow = {handleDeleteRow} /> 
             <button onClick={handleCreateTable} className="createTableButton"> Create Time Table </button> 

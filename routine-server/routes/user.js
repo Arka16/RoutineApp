@@ -7,9 +7,8 @@ const DataModel = require("../Database");
 router.get('/', async (req, res) => {
     console.log("getting user")
     try{
-      const id = userToId[req.params.username]
       console.log(id)
-      doc = await DataModel.findById(id)
+      doc = await DataModel.findOne(req.body.username)
       if (doc) {
         console.log('Found document:', doc);
         console.log(id)
@@ -30,7 +29,7 @@ router.get('/:id', async(req, res) => {
   // Handle user details
   console.log("getting tables")
   try{
-    doc = await DataModel.findById(req.params.id)
+    doc = await DataModel.findOne(req.body.username)
     if (doc) {
       console.log('Found document:', doc);
       res.status(200).json({data: doc})
@@ -58,7 +57,6 @@ router.post("/", async (req, res) => {
       console.log(userInfo)
       const data = await userInfo.save();   
       const dataModelId = userInfo._id;
-      userToId[userInfo.username] = userInfo._id;
       console.log("ASDF")
       res.status(201).json({_id: dataModelId,  message: 'Data saved successfully.'});
 
@@ -71,12 +69,43 @@ router.post("/", async (req, res) => {
 
 });
 
+router.post("/login", async (req, res, next) => {
+  console.log("getting user in POST enpoint")
+  console.log(req.body)
+  try{
+    //const id = userToId[req.body.username]
+    console.log(req.body)
+    console.log("Password from request is " + req.body.password)
+   
+    doc = await DataModel.findOne({username: req.body.username})
+    console.log("DOC IS")
+    console.log(doc)
+    if(doc){
+      console.log(doc.password)
+
+    }
+    if (!doc || doc.password !== req.body.password) {
+      console.log("ASDFADSFDS")
+      res.json({message: "Invalid username or password"})
+    } else {
+      res.status(200).json({username: req.body.username})
+      
+    }
+
+  }
+  catch(err){
+    console.error('Error:', err);
+
+  }
+  next()
+})
+
 router.delete("/", async (req, res, next) => {
   console.log("DELETING USER")
   try {
     console.log("in delete try")
-    console.log(req.body.id)
-    doc = await DataModel.findByIdAndDelete(req.body.id)
+    console.log(req.body.username)
+    doc = await DataModel.findOneAndDelete({username: req.body.username})
     if(doc){
       res.status(200).json({message: "User successfully deleted"});
     }

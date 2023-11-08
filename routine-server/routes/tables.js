@@ -5,21 +5,43 @@ const router = express.Router();
 
 const DataModel = require("../Database");
 
+//getting table
+router.get('/:username', async (req, res) => {
+  console.log("getting tables")
+  console.log(req.params)
+  try{
+    doc = await DataModel.findOne({username: req.params.username})
+    if (doc) {
+      //console.log('Found document:', doc);
+      res.status(200).json({data: doc})
+    } else {
+      res.status(404).json({message: "User not found"})
+    }
+
+  }
+  catch(err){
+    console.error('Error:', err);
+
+  }
+  
+    
+});
+
 //creating a schedule for the first time
 router.post("/",  async (req, res) => {
     console.log("hi");
-    console.log(req.body);
 
     try {
         console.log(req.body)
         console.log("In try")
-        const updatedDataModel = await DataModel.findByIdAndUpdate(
-          req.params.id,
+        const updatedDataModel = await DataModel.findOneAndUpdate(
+          {username: req.body.username},
           { $set: { table: req.body.rows } }, // Use $set to update the field
           { new: true } // To return the updated document
         );
   
         if (!updatedDataModel) {
+          console.log("POST TABLES returns 404")
           return res.status(404).json({ error: "Data model not found" });
         }
         console.log("After Update");
@@ -41,9 +63,9 @@ router.put("/",  async (req, res) => {
     try {
         console.log(req.body)
         console.log("In try")
-        const updatedDataModel = await DataModel.findByIdAndUpdate(
-          req.params.id,
-          { $set: { table: req.body.rows } }, // Use $set to update the field
+        const updatedDataModel = await DataModel.findOneAndUpdate(
+          {username: req.body.username},
+          { $set: { table: req.body.newRows } }, // Use $set to update the field
           { new: true } // To return the updated document
         );
         if (!updatedDataModel) {
@@ -67,7 +89,7 @@ router.put("/del", async (req, res, next)=>{
   console.log(DataModel)
   console.log(req.body.id)
   try {
-    const updatedDataModel = await DataModel.findByIdAndUpdate(req.body.id,
+    const updatedDataModel = await DataModel.findOneAndUpdate({username:req.body.username},
       { $set: { table: [] } }, // Use $set to update the field
       { new: true } // To return the updated document   
       )

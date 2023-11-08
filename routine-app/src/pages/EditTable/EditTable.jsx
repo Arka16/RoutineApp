@@ -15,7 +15,9 @@ function EditTable(props){
     const location = useLocation();
     const navigation = useNavigate();
 
-    const {data, id} = location.state | {}
+    const {data, username} = location.state || {}
+    console.log("DATA IN EDIT IS ")
+    console.log(location.state)
     const [newRows, setNewRows] = useState(data)
     const [dtWarning, setDtWarning] = useState(false)
     const [showFilledWarning, setShowFilledWarning] = useState(false)
@@ -46,7 +48,7 @@ function EditTable(props){
         navigation("/schedule", {
             state: {
               rows: data,
-              id:id
+              username:username
             },
           });
       };
@@ -96,13 +98,12 @@ function EditTable(props){
           })
           
           if(filled && validTime){
-            console.log(id)
             console.log(newRows)
-            const response = await axios.put(URL + "/table/" + id, {id, newRows});
+            const response = await axios.put(URL + "/tables", {username, newRows});
             navigation("/schedule",  {
               state: {
                 rows: newRows,
-                id:id
+                username:username
               },
             });
           }
@@ -111,7 +112,7 @@ function EditTable(props){
 
     return (
     <div>
-      <Settings id = {id}/>
+      <Settings username = {username}/>
     <h1> Edit Table </h1>
     {backClicked && isDialogOpen && <Alert 
           message="Warning: Your changes won't be saved. Are you sure you want to go back?"

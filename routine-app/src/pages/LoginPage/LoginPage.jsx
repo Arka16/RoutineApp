@@ -9,22 +9,26 @@ function LoginPage() {
   const [message, setMessage] = useState('');
   const [id, setId] = useState('')
   const [userExists, setUserExists] = useState(false)
-
+  const [correctPassword, setCorrectPassword] = useState(false)
   const URL = "http://localhost:3000"
   
   const fetchData = async () => {
     try{
-      const response = await axios.get(URL + "/get-user/" + username);
+      const response = await axios.get(URL + "/get-user/" + username, {
+        params: { password: password }});
       console.log("RES")
       console.log(response.data.id)
+      console.log("RES STATUS")
+      console.log(response.status)
       if (response){
         if (response.status === 200){
           setUserExists(true);
-          setId(response.data.id)
+          setCorrectPassword(true);
+          // setId(response.data.id)
         }     
         else{
           setUserExists(false);
-
+          setCorrectPassword(false);
         }
            
       }
@@ -35,27 +39,24 @@ function LoginPage() {
     }
   }
 
-  useEffect(() => {
-    fetchData();
-  } )
-  const handleLogin = (e) => {
+  // useEffect(() => {
+  //   fetchData();
+  // } )
+  const handleLogin = async (e) => {
     e.preventDefault();
     
-    // You can add your authentication logic here.
-    // For this example, let's consider a simple username and password.
-    
-    if (username === 'demo' && password === 'password') {
-      setMessage('Login successful');
-    } else {
-      setMessage('Invalid username or password');
-    }
-    if(userExists){
+    const response = await axios.post(URL + "/user/login", {username, password})
+    if(response.data.username){
       navigation("/schedule", {
         state: {
-          id: id
+          username: username
         },
     });
 
+    }
+
+    else {
+      setMessage(response.data.message);
     }
    
   }
