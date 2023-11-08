@@ -4,6 +4,7 @@ import CreateTable from './pages/CreateTable/CreateTable';
 import SchedulePage from './pages/SchedulePage/SchedulePage';
 import EditTable from './pages/EditTable/EditTable';
 import CreateAccount from './pages/CreateAccount/CreateAccount';
+import TableEntry from './pages/TableEntry/TableEntry';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/schedule" element={<SchedulePage />} />
         <Route path="/createTable" element={<CreateTable />} />
         <Route path="/edit" element={<EditTable />} />
+        <Route path = "/entry" element = {<TableEntry/>} />
       </Routes>
     </Router>
   );

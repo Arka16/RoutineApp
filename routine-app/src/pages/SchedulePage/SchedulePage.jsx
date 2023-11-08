@@ -4,14 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import Settings from "../../components/Settings/Settings";
 import axios from "axios";
-
+import './SchedulePage.css'
 
 function SchedulePage() {
   const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState([])
   const {rows, username} = location.state || {}
-
   const URL = "http://localhost:3000"
   
   const fetchData = async () => {
@@ -70,7 +69,7 @@ function SchedulePage() {
             <th>Goal</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="tableEntry" >
           {data.map((row, index) => {
               const timeParts = row.time.split(':');
               const hour = parseInt(timeParts[0]);
@@ -91,7 +90,15 @@ function SchedulePage() {
               if (hour === 0) {
                 formattedHour = 12;
               }
-            return (<tr key={index}>
+              
+            return (<tr key={index} className = "tableRowStyle" onClick = {()=> navigation("/entry", {
+              state: {
+                task: row.task,
+                goal: row.goal,
+                data,
+                username
+              }
+            })}>
              <td>{formattedHour}:{minute.toString().padStart(2, '0')} {ampm}</td>
               <td>{row.task}</td>
               <td>{row.goal}</td>
