@@ -17,7 +17,13 @@ function Warnings(props){
               {props.showTimeWarning && props.createButtonClicked &&
              <div  className="warning">
              <button onClick={props.closeTimeWarning} className= "warning-button"> close </button>
-             <p className="warningText"> Warning: Start times of tasks overlap! </p>
+             <p className="warningText"> Warning: Invalid start and end times! </p>
+             </div>
+             }
+              {props.showTimeWarning2 && props.createButtonClicked &&
+             <div  className="warning">
+             <button onClick={props.closeTimeWarning2} className= "warning-button"> close </button>
+             <p className="warningText"> Warning: Times of tasks overlap! </p>
              </div>
              }
         </div>

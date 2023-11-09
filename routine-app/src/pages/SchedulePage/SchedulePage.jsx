@@ -71,24 +71,46 @@ function SchedulePage() {
         </thead>
         <tbody className="tableEntry" >
           {data.map((row, index) => {
-              const timeParts = row.time.split(':');
-              const hour = parseInt(timeParts[0]);
-              const minute = parseInt(timeParts[1]);
+              console.log("START IS")
+              console.log(row.startTime)
+              const timeParts1 = row.startTime.split(':');
+              const hour1 = parseInt(timeParts1[0]);
+              const minute1 = parseInt(timeParts1[1]);
             
               // Format the time in 12-hour format
-              let ampm = 'am';
-              let formattedHour = hour;
+              let ampm1 = 'am';
+              let formattedHour1 = hour1;
               
-              if (hour >= 12) {
-                ampm = 'pm';
-                if (hour > 12) {
-                  formattedHour = hour - 12;
+              if (hour1 >= 12) {
+                ampm1 = 'pm';
+                if (hour1 > 12) {
+                  formattedHour1 = hour1 - 12;
                 }
               }
             
               // Handle midnight (00:00)
-              if (hour === 0) {
-                formattedHour = 12;
+              if (hour1 === 0) {
+                formattedHour1 = 12;
+              }
+
+              const timeParts2 = row.endTime.split(':');
+              const hour2 = parseInt(timeParts2[0]);
+              const minute2 = parseInt(timeParts2[1]);
+            
+              // Format the time in 12-hour format
+              let ampm2 = 'am';
+              let formattedHour2 = hour2;
+              
+              if (hour2 >= 12) {
+                ampm2 = 'pm';
+                if (hour2 > 12) {
+                  formattedHour2 = hour2 - 12;
+                }
+              }
+            
+              // Handle midnight (00:00)
+              if (hour2 === 0) {
+                formattedHour2 = 12;
               }
               
             return (<tr key={index} className = "tableRowStyle" onClick = {()=> navigation("/entry", {
@@ -99,7 +121,7 @@ function SchedulePage() {
                 username
               }
             })}>
-             <td>{formattedHour}:{minute.toString().padStart(2, '0')} {ampm}</td>
+             <td>{formattedHour1}:{minute1.toString().padStart(2, '0')} {ampm1} -  {formattedHour2}:{minute2.toString().padStart(2, '0')} {ampm2} </td>
               <td>{row.task}</td>
               <td>{row.goal}</td>
             </tr>)

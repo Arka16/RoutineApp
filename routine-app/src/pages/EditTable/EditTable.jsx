@@ -26,6 +26,7 @@ function EditTable(props){
     const URL = "http://localhost:3000"
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [showTimeWarning, setShowTimeWarning] = useState(false)
+    const [showTimeWarning2, setShowTimeWarning2] = useState(false)
 
     const handleDeleteRow = (index) => {
         if (newRows.length > 1){
@@ -78,26 +79,36 @@ function EditTable(props){
         setShowTimeWarning(false)
       }
 
+      function closeTimeWarning2(){
+        setShowTimeWarning2(false)
+      }
+
       async function  handleCreateTable(){
           setCreateButtonClicked(true)
           var filled = true;
           var validTime = true;
           var recentTime = ""
+          var validRange = true;
           newRows.forEach((item) => {
-            if (!item.time || !item.task || !item.goal){
+            if (!item.startTime || !item.endTime ||  !item.task || !item.goal){
               setShowFilledWarning(true)
               filled = false
             }
-            if(item.time && (recentTime !== "" && !startsBefore(recentTime, item.time))){
+            if(item.startTime && item.endTime && !startsBefore(item.startTime, item.endTime)){
               setShowTimeWarning(true)
+              validRange = false;
+  
+            }
+            if(item.startTime && (recentTime !== "" && !startsBefore(recentTime, item.startTime))){
+              setShowTimeWarning2(true)
               validTime = false
             }
-            if(item.time){
-              recentTime = item.time;
+            if(item.endTime){
+              recentTime = item.endTime;
             }
           })
           
-          if(filled && validTime){
+          if(filled && validTime && validRange){
             console.log(newRows)
             const response = await axios.put(URL + "/tables", {username, newRows});
             navigation("/schedule",  {
@@ -128,14 +139,16 @@ function EditTable(props){
     </div>
     
     <Warnings 
-        showFilledWarning = {showFilledWarning}
-        createButtonClicked = {createButtonClicked}
-        closeFilledWarning = {closeFilledWarning}
-        dtWarning = {dtWarning}
-        closeDeleteWarning = {closeDeleteWarning}
-        closeTimeWarning = {closeTimeWarning}
-        showTimeWarning = {showTimeWarning}
-        />
+             showFilledWarning = {showFilledWarning}
+             createButtonClicked = {createButtonClicked}
+             closeFilledWarning = {closeFilledWarning}
+             dtWarning = {dtWarning}
+             closeDeleteWarning = {closeDeleteWarning}
+             closeTimeWarning = {closeTimeWarning}
+             showTimeWarning = {showTimeWarning}
+             closeTimeWarning2 = {closeTimeWarning2}
+             showTimeWarning2 = {showTimeWarning2}
+             />
     </div>
     
     

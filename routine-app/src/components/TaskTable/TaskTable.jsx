@@ -16,7 +16,7 @@ function TaskTable(props) {
   };
 
   const handleAddRow = () => {
-    setRows([...rows, { time: '', task: '', goal: '' }]);
+    setRows([...rows, { time: '', startTime: '', endTime: '', task: '', goal: '' }]);
   };
 
   
@@ -35,15 +35,24 @@ function TaskTable(props) {
           </thead>
           <tbody>
             {rows.map((row, index) => (
+              
               <tr key={index}>
-                <td>
-                  <input
-                    type="time"
-                    placeholder='10:00 AM'
-                    value={row.time}
-                    onChange={(e) => handleRowChange(index, 'time', e.target.value)}
-                  />
-                </td>
+                 <td>
+    <div className="time-input">
+      <input
+        type="time"
+        value={row.startTime}
+        onChange={(e) => handleRowChange(index, 'startTime', e.target.value)}
+      />
+      <span className="dash">-</span>
+      <input
+        type="time"
+        value={row.endTime}
+        onChange={(e) => handleRowChange(index, 'endTime', e.target.value)}
+      />
+    </div>
+  </td>
+                
                 <td>
                   <input
                     type="text"

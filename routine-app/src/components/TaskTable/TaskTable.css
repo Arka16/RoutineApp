@@ -36,6 +36,30 @@ h1{
     cursor: pointer;
   }
 
+  .time-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .time-input input {
+    padding: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .dash {
+    margin: 0 5px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 24px; /* Adjust the font size for the dash as needed */
+    color: #333;
+  }
+  
+  
+  
+  
+  
+  
+
  
   
   

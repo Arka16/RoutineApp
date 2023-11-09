@@ -11,7 +11,9 @@ const dataSchema = new mongoose.Schema({
         {
           time: String,
           task: String,
-          goal: String
+          goal: String,
+          startTime: String,
+          endTime: String
         },
       ]
 
