@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import './CreateAccount.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import {isValidPhoneNumber, isValidEmail} from '../../helper_functions/helper_functions'
 function CreateAccount(){
 
     const navigation = useNavigate();
@@ -14,6 +14,8 @@ function CreateAccount(){
     const [repassword, setRepassword] = useState('');
     const [message, setMessage] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('')
+    const [emailMessage, setEmailMessage] = useState('')
+    const [phoneMessage, setPhoneMessage] = useState('')
     const URL = "http://localhost:3000";
 
     function handleRepeatChange(e){
@@ -31,16 +33,52 @@ function CreateAccount(){
       if(repassword && e.target.value && e.target.value !== repassword){
         setPasswordMessage("Passwords don't match!")
       }
+      else{
+        setPasswordMessage("")
+      }
      
      
+    }
+
+    function handleEmailChange(e){
+      setEmail(e.target.value)
+      if (e.target.value && !isValidEmail(e.target.value)){
+        setEmailMessage("Invalid Email")
+      }
+      else{
+        setEmailMessage("")
+        
+      }
+     
+     
+    }
+
+    function handlePhoneNumberChange(e){
+      setPhoneNumber(e.target.value)
+      if(e.target.value && !isValidPhoneNumber(e.target.value)){
+        setPhoneMessage("Invalid Phone Number")
+      }
+      else{
+        setPhoneMessage("")
+       
+      }
     }
 
     async function handleLogin(e) {
       e.preventDefault();
       const response = await axios.post(URL + "/user/login", {username, password})
       
-      if(!name || !username || !password || !email || !phoneNumber || password !== repassword){
+      if(!name || !username || !password || !email || !phoneNumber || !repassword){
         setMessage("Not all entries filled")
+      }
+      else if(password !== repassword){
+        setPasswordMessage("Passwords don't match!")
+      }
+      else if(!isValidEmail(email)){
+        setEmailMessage("Invalid Email")
+      }
+      else if(!isValidPhoneNumber(phoneNumber)){
+        setPhoneMessage("Invalid Phone Number")
       }
       else if(response.data['message1']){
         setMessage(response.data['message1'])
@@ -93,16 +131,17 @@ function CreateAccount(){
           type="text"
           id="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
         />
-
+         <p className="message"> {emailMessage} </p>
         <label htmlFor="phoneNumber"> Enter Phone Number:</label>
         <input
-          type="text"
+          type="tel"
           id="phoneNumber"
           value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={handlePhoneNumberChange}
         />
+         <p className="message"> {phoneMessage} </p>
          <label htmlFor="username"> Create Username:</label>
         <input
           type="text"

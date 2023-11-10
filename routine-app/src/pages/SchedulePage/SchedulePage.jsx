@@ -5,14 +5,24 @@ import { useEffect, useState } from "react";
 import Settings from "../../components/Settings/Settings";
 import axios from "axios";
 import './SchedulePage.css'
-
+import Toggle from "../../components/Toggle/Toggle";
 function SchedulePage() {
   const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState([])
   const {rows, username} = location.state || {}
+  const [toggleChecked, setToggleChecked] = useState(false);
+  const [playPause, setPlayPause] = useState(" ▶ ")
   const URL = "http://localhost:3000"
-  
+
+
+
+   
+
+  const handleToggleChange = () => {
+    setToggleChecked(!toggleChecked);
+  };
+  console.log(toggleChecked)
   const fetchData = async () => {
     try{
       const response = await axios.get(URL + "/tables/" + username);
@@ -31,7 +41,14 @@ function SchedulePage() {
   } )
 
 
- 
+  function handlePlayPause(){
+     if(playPause ===  "▶️"){
+      setPlayPause("⏸️")
+     }
+     else{
+      setPlayPause("▶️") 
+     }
+  }
   function handleEditTable(){
     console.log("DATA IN SCHEDUE IS")
     console.log(data)
@@ -60,6 +77,9 @@ function SchedulePage() {
   return (
     <div>
       <Settings username = {username}/>
+      <div className="toggle-container">
+        <Toggle checked={toggleChecked} onChange={handleToggleChange} />
+      </div>
       <h1>Your Schedule</h1>
       <table className="task-table">
         <thead>
@@ -121,15 +141,15 @@ function SchedulePage() {
                 username
               }
             })}>
-             <td>{formattedHour1}:{minute1.toString().padStart(2, '0')} {ampm1} -  {formattedHour2}:{minute2.toString().padStart(2, '0')} {ampm2} </td>
+             <td> {toggleChecked && <button onClick={handlePlayPause}>  {playPause}   </button>}{ formattedHour1}:{minute1.toString().padStart(2, '0')} {ampm1} -  {formattedHour2}:{minute2.toString().padStart(2, '0')} {ampm2} </td>
               <td>{row.task}</td>
               <td>{row.goal}</td>
             </tr>)
 })}
         </tbody>
       </table>
-      <button onClick={handleEditTable} className="editTableButton"> Edit Table </button> 
-      <button onClick={handleDeleteTable} className="editTableButton"> Delete and Create New Table </button> 
+      {!toggleChecked && ( <div> <button onClick={handleEditTable} className="editTableButton"> Edit Table </button> 
+      <button onClick={handleDeleteTable} className="editTableButton"> Delete and Create New Table </button> </div>)}
     </div>
   );
 }

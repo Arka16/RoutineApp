@@ -13,4 +13,17 @@ function startsBefore(time1, time2) {
     return hour1 < hour2;
 }
 
-module.exports = { startsBefore };
+function isValidPhoneNumber(phoneNumber) {
+    // Regular expression for a valid US phone number (10 digits, optional dashes)
+    const phoneRegex = /^\d{10}$|^\d{3}-\d{3}-\d{4}$/;
+    return phoneRegex.test(phoneNumber);
+  }
+
+function isValidEmail(email) {
+    // Regular expression for a valid email address
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailRegex.test(email);
+  }
+  
+
+module.exports = { startsBefore, isValidPhoneNumber, isValidEmail };
