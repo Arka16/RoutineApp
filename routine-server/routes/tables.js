@@ -7,8 +7,8 @@ const DataModel = require("../Database");
 
 //getting table
 router.get('/:username', async (req, res) => {
-  console.log("getting tables")
-  console.log(req.params)
+  //console.log("getting tables")
+  // console.log(req.params)
   try{
     doc = await DataModel.findOne({username: req.params.username})
     if (doc) {

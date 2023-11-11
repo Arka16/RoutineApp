@@ -1,18 +1,15 @@
-
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
-//mongoose.connect('mongodb+srv://Arka21:Fooler%2321@cluster0.ykznhdg.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect("mongodb://localhost:27017/usersDB", {useNewUrlParser: true})
-const db = mongoose.connection;
-const DataModel  = require('./Database');
+
 
 const tableRoutes = require("./routes/tables")
 const userRoutes = require("./routes/user")
-
+const messageRoutes = require("./routes/message")
 var router = express.Router()
 const userToId = {}
 
@@ -24,6 +21,7 @@ app.use(cors())
 app.use("/tables", tableRoutes);
 app.use("/user", userRoutes);
 
+app.use("/message", messageRoutes)
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

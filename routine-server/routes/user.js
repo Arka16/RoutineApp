@@ -7,12 +7,10 @@ const DataModel = require("../Database");
 router.get('/', async (req, res) => {
     console.log("getting user")
     try{
-      console.log(id)
       doc = await DataModel.findOne(req.body.username)
       if (doc) {
         console.log('Found document:', doc);
-        console.log(id)
-        res.status(200).json({id:id})
+        res.status(200).json({message: "User Found"})
       } else {
         res.status(404).json({message: "User not found"})
       }

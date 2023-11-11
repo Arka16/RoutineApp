@@ -6,6 +6,8 @@ import Settings from "../../components/Settings/Settings";
 import axios from "axios";
 import './SchedulePage.css'
 import Toggle from "../../components/Toggle/Toggle";
+import { sendReminder } from "../../helper_functions/helper_functions";
+
 function SchedulePage() {
   const location = useLocation();
   const navigation = useNavigate();
@@ -13,6 +15,8 @@ function SchedulePage() {
   const {rows, username} = location.state || {}
   const [toggleChecked, setToggleChecked] = useState(false);
   const [playPause, setPlayPause] = useState(" ▶ ")
+  const [playPauseStates, setPlayPauseStates] = useState({});
+  
   const URL = "http://localhost:3000"
 
 
@@ -38,17 +42,28 @@ function SchedulePage() {
 
   useEffect(() => {
     fetchData();
+    if(toggleChecked && data.length >= 1 && data[0].startTime && data[0].endTime){
+      console.log(data[0].startTime)
+      console.log(data[0].endTime)
+      sendReminder(playPauseStates[0], 0,  username, data[0].startTime, data[0].endTime);
+
+    }
   } )
 
 
-  function handlePlayPause(){
-     if(playPause ===  "▶️"){
-      setPlayPause("⏸️")
-     }
-     else{
-      setPlayPause("▶️") 
-     }
-  }
+    
+   
+
+
+  
+  
+  const handlePlayPause = (index) => {
+    setPlayPauseStates((prevState) => {
+      const newPlayPauseStates = { ...prevState };
+      newPlayPauseStates[index] = !newPlayPauseStates[index];
+      return newPlayPauseStates;
+    });
+  };
   function handleEditTable(){
     console.log("DATA IN SCHEDUE IS")
     console.log(data)
@@ -132,16 +147,21 @@ function SchedulePage() {
               if (hour2 === 0) {
                 formattedHour2 = 12;
               }
-              
-            return (<tr key={index} className = "tableRowStyle" onClick = {()=> navigation("/entry", {
-              state: {
-                task: row.task,
-                goal: row.goal,
-                data,
-                username
-              }
-            })}>
-             <td> {toggleChecked && <button onClick={handlePlayPause}>  {playPause}   </button>}{ formattedHour1}:{minute1.toString().padStart(2, '0')} {ampm1} -  {formattedHour2}:{minute2.toString().padStart(2, '0')} {ampm2} </td>
+
+              // onClick = {()=> navigation("/entry", {
+              //   state: {
+              //     task: row.task,
+              //     goal: row.goal,
+              //     data,
+              //     username
+              //   }
+              // })}
+            return (<tr key={index} className = "tableRowStyle">
+             <td> {toggleChecked && (
+  <button onClick={() => handlePlayPause(index)}>
+    {playPauseStates[index] ? "⏸️" : "▶️"}
+  </button>
+)}{ formattedHour1}:{minute1.toString().padStart(2, '0')} {ampm1} -  {formattedHour2}:{minute2.toString().padStart(2, '0')} {ampm2} </td>
               <td>{row.task}</td>
               <td>{row.goal}</td>
             </tr>)
