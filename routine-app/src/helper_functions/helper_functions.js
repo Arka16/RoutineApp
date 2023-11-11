@@ -52,44 +52,47 @@ export function isValidEmail(email) {
     return currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes < endTimeInMinutes;
   }
   let lastReminderTime = 0;
-  export async function sendReminder(isPlay, index, username, st, et){
-    // const data = {username, index}
-    // const startTime = returnFormattedTime(st)
-    // const endTime = returnFormattedTime(et)
-    // var [hours1, minutes1] = startTime.split(':');
-    // var [hours2, minutes2] = endTime.split(':');
-    // hours1 = parseInt(hours1, 10);
-    // hours2 = parseInt(hours2, 10);
-    // minutes1 = parseInt(minutes1, 10);
-    // minutes2 = parseInt(minutes2, 10);
+  export async function sendReminder(playPauseStates, username, data){
+    let index = -1
+    for(var i = 0; i < data.length; i++){
+      var st = data[i].startTime
+      var et = data[i].endTime
+      if(st && et){
+        const timeParts1 = st.split(':');
+        const hour1 = parseInt(timeParts1[0]);
+        const minute1 = parseInt(timeParts1[1]);
+        const timeParts2 = et.split(':');
+        const hour2 = parseInt(timeParts2[0]);
+        const minute2 = parseInt(timeParts2[1]);
+        if(isCurrentTimeBetween(hour1, minute1, hour2, minute2)){
+          index = i
+          break
+        }
+
+      }
+
+    }
+    console.log("TASK TO MESSAGE IS ")
     console.log(index)
-    console.log("START in helper is ")
-    console.log(st)
-    console.log("END in helper is ")
-    console.log(et)
-    const timeParts1 = st.split(':');
-    const hour1 = parseInt(timeParts1[0]);
-    const minute1 = parseInt(timeParts1[1]);
-    
-    const timeParts2 = et.split(':');
-    const hour2 = parseInt(timeParts2[0]);
-    const minute2 = parseInt(timeParts2[1]);
-    
-   
-    const reminderInterval = 10 * 1000; 
-    
-    if(!isPlay && isCurrentTimeBetween(hour1, minute1, hour2, minute2)){
+    if(index !== -1 && !playPauseStates[index]){
+      const reminderInterval = 10 * 1000; 
       const currentTime = Date.now()
       if(currentTime - lastReminderTime >= reminderInterval){
         try {
-          const data = {username, index: 0}
+          const data = {username, index}
           await axios.post(URL + "/message", data)
           lastReminderTime = currentTime    
         } catch (error) {
           console.log("ERROR during sending reminder")
         }
       }
+
     }
+    
+    
+   
+    
+    
   }
   
 

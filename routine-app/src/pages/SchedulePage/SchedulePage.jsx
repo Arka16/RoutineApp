@@ -42,10 +42,8 @@ function SchedulePage() {
 
   useEffect(() => {
     fetchData();
-    if(toggleChecked && data.length >= 1 && data[0].startTime && data[0].endTime){
-      console.log(data[0].startTime)
-      console.log(data[0].endTime)
-      sendReminder(playPauseStates[0], 0,  username, data[0].startTime, data[0].endTime);
+    if(toggleChecked && data.length >= 1){
+      sendReminder(playPauseStates, username, data);
 
     }
   } )

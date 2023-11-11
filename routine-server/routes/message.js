@@ -14,6 +14,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID
 // Initialize Twilio client
 const client = twilio(accountSid, authToken);
 
+
 // Endpoint to send reminder
 router.post('/', async (req, res) => {
     console.log("IN MESSAGE ROUTE")
@@ -36,5 +37,37 @@ router.post('/', async (req, res) => {
       res.status(500).json({ error: 'Failed to send reminder' });
     }
   });
+
+  router.post("/toggle", async(req,res) => {
+    const {username, index, toggle} = req.body
+    try {
+        const doc = await DataModel.findOneAndUpdate({username: username},
+            { $set: { activeMode: toggle } }, // Use $set to update the field
+          { new: true } // To return the updated document
+          )
+
+        
+    } catch (error) {
+        console.error('Error updating toggle state:', error.message);
+        res.status(500).json({ error: 'Failed updating toggle'}); 
+    }
+      
+  })
+
+//   router.post("/play", async(req,res) => {
+//     const {username, index, playPauseStates} = req.body
+//     try {
+//         const doc = await DataModel.findOneAndUpdate({username: username},
+//             { $set:  playPauseStates[index]: playPauseStates[index] }, // Use $set to update the field
+//           { new: true } // To return the updated document
+//           )
+
+        
+//     } catch (error) {
+//         console.error('Error updating toggle state:', error.message);
+//         res.status(500).json({ error: 'Failed updating toggle'}); 
+//     }
+      
+//   })
 
   module.exports = router;

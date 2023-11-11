@@ -9,6 +9,8 @@ const dataSchema = new mongoose.Schema({
     password: String,
     email: String,
     phoneNumber: String,
+    activeMode: Boolean,
+    // playPauseStates: {state: Boolean},
     table: [
         {
           time: String,
