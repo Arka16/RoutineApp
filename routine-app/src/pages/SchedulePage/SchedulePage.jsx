@@ -14,13 +14,13 @@ function SchedulePage() {
   const [data, setData] = useState([])
   const {rows, username} = location.state || {}
   const [toggleChecked, setToggleChecked] = useState(false);
-  const [playPause, setPlayPause] = useState(" ▶ ")
   const [playPauseStates, setPlayPauseStates] = useState({});
-  
+  const [pastTasks, setPastTasks] = useState(new Array(data.length).fill(false))
+  const [futureTasks, setFutureTasks] = useState({})
   const URL = "http://localhost:3000"
 
 
-
+  
    
 
   const handleToggleChange = () => {
@@ -40,13 +40,18 @@ function SchedulePage() {
     }
   }
 
+  const updatePastTasks = (newPastTasks) => {
+    setPastTasks(newPastTasks);
+  };
+
   useEffect(() => {
     fetchData();
     if(toggleChecked && data.length >= 1){
-      sendReminder(playPauseStates, username, data);
-
+      sendReminder(playPauseStates, username, data, updatePastTasks);
+      console.log("PRINTING PAST TASKS")
+      console.log(pastTasks)
     }
-  } )
+  },  [fetchData, toggleChecked, data, playPauseStates, username, pastTasks])
 
 
     
@@ -146,6 +151,9 @@ function SchedulePage() {
                 formattedHour2 = 12;
               }
 
+              const taskStyle = (toggleChecked && pastTasks[index]) ? 'prevStateStyle' : 'normalStateStyle'
+              console.log(taskStyle)
+              console.log(pastTasks[index] + "AT INDEX " + index)
               // onClick = {()=> navigation("/entry", {
               //   state: {
               //     task: row.task,
@@ -154,7 +162,7 @@ function SchedulePage() {
               //     username
               //   }
               // })}
-            return (<tr key={index} className = "tableRowStyle">
+            return (<tr key={index} className={`tableRowStyle ${taskStyle ? taskStyle : ''}`}>
              <td> {toggleChecked && (
   <button onClick={() => handlePlayPause(index)}>
     {playPauseStates[index] ? "⏸️" : "▶️"}

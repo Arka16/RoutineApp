@@ -1,4 +1,13 @@
 .tableRowStyle:hover {
     background: darkgray;
-    cursor: pointer
-  };
+    cursor: pointer;
+  }
+
+  .tableRowStyle.prevStateStyle {
+  background: red;
+}
+
+
+  .normalStateStyle{
+    background-color: white;
+  }

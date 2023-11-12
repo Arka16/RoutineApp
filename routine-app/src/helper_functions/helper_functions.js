@@ -52,7 +52,7 @@ export function isValidEmail(email) {
     return currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes < endTimeInMinutes;
   }
   let lastReminderTime = 0;
-  export async function sendReminder(playPauseStates, username, data){
+  export async function sendReminder(playPauseStates, username, data, setPastTasks){
     let index = -1
     for(var i = 0; i < data.length; i++){
       var st = data[i].startTime
@@ -68,6 +68,27 @@ export function isValidEmail(email) {
           index = i
           break
         }
+        // else {
+        //   setPastTasks((pastStates) => {
+        //     const newPastStates = [...pastStates]
+        //     if(newPastStates[i] === false){
+        //       newPastStates[i] = true
+        //     }
+        //     return newPastStates;
+        //   });
+        // }
+        setPastTasks((pastStates)=>{
+          const newPastStates = [...pastStates]
+          let ind = 0;
+          while(ind < i){
+            newPastStates[ind] = true
+            ind++
+          }
+          console.log("NEW PAST STATES")
+          console.log(newPastStates)
+          return newPastStates
+        })
+        
 
       }
 
