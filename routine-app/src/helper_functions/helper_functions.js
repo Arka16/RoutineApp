@@ -51,69 +51,78 @@ export function isValidEmail(email) {
   
     return currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes < endTimeInMinutes;
   }
+
+  function isCurrentTimeLess(startHour, startMinute) {
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+  
+    const startTimeInMinutes = startHour * 60 + startMinute;
+    const currentTimeInMinutes = currentHour * 60 + currentMinute;
+  
+    return currentTimeInMinutes < startTimeInMinutes;
+  }
+
+  function isCurrentTimeGreater(endHour, endMinute) {
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+    const endTimeInMinutes = endHour * 60 + endMinute;
+    const currentTimeInMinutes = currentHour * 60 + currentMinute;
+    return currentTimeInMinutes > endTimeInMinutes;
+  }
+
   let lastReminderTime = 0;
-  export async function sendReminder(playPauseStates, username, data, setPastTasks){
-    let index = -1
-    for(var i = 0; i < data.length; i++){
-      var st = data[i].startTime
-      var et = data[i].endTime
-      if(st && et){
-        const timeParts1 = st.split(':');
+  export async function sendReminder(playPauseStates, username, data, setPastTasks, setFutureTasks) {
+    let index = -1;
+    const newPastStates = Array(data.length).fill(false); 
+    const newFutureStates = Array(data.length).fill(false); 
+    for (var i = 0; i < data.length; i++) {
+      var st = data[i].startTime;
+      var et = data[i].endTime;
+  
+      if (st && et) {
+        const timeParts1 = st.split(":");
         const hour1 = parseInt(timeParts1[0]);
         const minute1 = parseInt(timeParts1[1]);
-        const timeParts2 = et.split(':');
+        const timeParts2 = et.split(":");
         const hour2 = parseInt(timeParts2[0]);
         const minute2 = parseInt(timeParts2[1]);
-        if(isCurrentTimeBetween(hour1, minute1, hour2, minute2)){
-          index = i
-          break
+  
+        if (isCurrentTimeGreater(hour2, minute2)) {
+          newPastStates[i] = true;
         }
-        // else {
-        //   setPastTasks((pastStates) => {
-        //     const newPastStates = [...pastStates]
-        //     if(newPastStates[i] === false){
-        //       newPastStates[i] = true
-        //     }
-        //     return newPastStates;
-        //   });
-        // }
-        setPastTasks((pastStates)=>{
-          const newPastStates = [...pastStates]
-          let ind = 0;
-          while(ind < i){
-            newPastStates[ind] = true
-            ind++
-          }
-          console.log("NEW PAST STATES")
-          console.log(newPastStates)
-          return newPastStates
-        })
         
-
+  
+        else if (isCurrentTimeBetween(hour1, minute1, hour2, minute2)) {
+          index = i;
+        }
+        else{
+          newFutureStates[i] = true;
+        }
+      
       }
-
     }
-    console.log("TASK TO MESSAGE IS ")
-    console.log(index)
-    if(index !== -1 && !playPauseStates[index]){
-      const reminderInterval = 10 * 1000; 
-      const currentTime = Date.now()
-      if(currentTime - lastReminderTime >= reminderInterval){
+    
+    setPastTasks(newPastStates);
+    setFutureTasks(newFutureStates);
+    console.log("TASK TO MESSAGE IS ");
+    console.log(index);
+  
+    if (index !== -1 && !playPauseStates[index]) {
+      const reminderInterval = 10 * 1000;
+      const currentTime = Date.now();
+      if (currentTime - lastReminderTime >= reminderInterval) {
         try {
-          const data = {username, index}
-          await axios.post(URL + "/message", data)
-          lastReminderTime = currentTime    
+          const data = { username, index };
+          await axios.post(URL + "/message", data);
+          lastReminderTime = currentTime;
         } catch (error) {
-          console.log("ERROR during sending reminder")
+          console.log("ERROR during sending reminder");
         }
       }
-
     }
-    
-    
-   
-    
-    
   }
+  
   
 

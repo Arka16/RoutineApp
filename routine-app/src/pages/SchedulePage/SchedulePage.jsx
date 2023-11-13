@@ -7,16 +7,17 @@ import axios from "axios";
 import './SchedulePage.css'
 import Toggle from "../../components/Toggle/Toggle";
 import { sendReminder } from "../../helper_functions/helper_functions";
-
+import Timer from "../../components/Timer/Timer";
 function SchedulePage() {
   const location = useLocation();
   const navigation = useNavigate();
   const [data, setData] = useState([])
   const {rows, username} = location.state || {}
   const [toggleChecked, setToggleChecked] = useState(false);
-  const [playPauseStates, setPlayPauseStates] = useState({});
+  const [playPauseStates, setPlayPauseStates] = useState([]);
   const [pastTasks, setPastTasks] = useState(new Array(data.length).fill(false))
   const [futureTasks, setFutureTasks] = useState({})
+  const [curTask, setCurTask] = useState(false)
   const URL = "http://localhost:3000"
 
 
@@ -44,14 +45,19 @@ function SchedulePage() {
     setPastTasks(newPastTasks);
   };
 
+  const updateFutureTasks = (newFutureTasks) => {
+    setFutureTasks(newFutureTasks);
+  };
+
   useEffect(() => {
     fetchData();
+    setCurTask(playPauseStates.some((state) => typeof state !== "undefined"));
     if(toggleChecked && data.length >= 1){
-      sendReminder(playPauseStates, username, data, updatePastTasks);
+      sendReminder(playPauseStates, username, data, updatePastTasks, updateFutureTasks);
       console.log("PRINTING PAST TASKS")
       console.log(pastTasks)
     }
-  },  [fetchData, toggleChecked, data, playPauseStates, username, pastTasks])
+  },  [fetchData, toggleChecked, data, playPauseStates, username, updatePastTasks, pastTasks])
 
 
     
@@ -62,10 +68,11 @@ function SchedulePage() {
   
   const handlePlayPause = (index) => {
     setPlayPauseStates((prevState) => {
-      const newPlayPauseStates = { ...prevState };
+      const newPlayPauseStates = [...prevState];
       newPlayPauseStates[index] = !newPlayPauseStates[index];
       return newPlayPauseStates;
     });
+    
   };
   function handleEditTable(){
     console.log("DATA IN SCHEDUE IS")
@@ -99,6 +106,7 @@ function SchedulePage() {
         <Toggle checked={toggleChecked} onChange={handleToggleChange} />
       </div>
       <h1>Your Schedule</h1>
+      {toggleChecked && curTask && <Timer />}
       <table className="task-table">
         <thead>
           <tr>
@@ -150,8 +158,16 @@ function SchedulePage() {
               if (hour2 === 0) {
                 formattedHour2 = 12;
               }
+              var taskStyle = 'normalStateStyle'
+              if(toggleChecked){
+                if(pastTasks[index]){
+                  taskStyle = 'prevStateStyle'
 
-              const taskStyle = (toggleChecked && pastTasks[index]) ? 'prevStateStyle' : 'normalStateStyle'
+                }
+                if(futureTasks[index]){
+                  taskStyle = 'futureStateStyle'
+                }
+              }
               console.log(taskStyle)
               console.log(pastTasks[index] + "AT INDEX " + index)
               // onClick = {()=> navigation("/entry", {
@@ -163,7 +179,7 @@ function SchedulePage() {
               //   }
               // })}
             return (<tr key={index} className={`tableRowStyle ${taskStyle ? taskStyle : ''}`}>
-             <td> {toggleChecked && (
+             <td> {toggleChecked && !pastTasks[index] && !futureTasks[index] && (
   <button onClick={() => handlePlayPause(index)}>
     {playPauseStates[index] ? "⏸️" : "▶️"}
   </button>
