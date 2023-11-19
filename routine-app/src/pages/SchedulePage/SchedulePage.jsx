@@ -24,8 +24,17 @@ function SchedulePage() {
   
    
 
-  const handleToggleChange = () => {
+  async function  handleToggleChange (){
     setToggleChecked(!toggleChecked);
+    try{
+      const data = {username, toggleChecked}
+      await axios.put(URL + "/tables/toggle", data)
+    }
+    catch(error){
+      console.log("Error with toggle update")
+      console.log(error.message)
+    }
+    
   };
   console.log(toggleChecked)
   const fetchData = async () => {
@@ -38,6 +47,16 @@ function SchedulePage() {
     }
     catch(error){
       console.log(error)
+    }
+  }
+
+  const fetchActiveState = async ()=> {
+    try {
+      const response = await axios.get(URL + "/tables/toggle/" + username)
+      setToggleChecked(response.data.toggleChecked)
+    } catch (error) {
+      console.log(error)
+      
     }
   }
 
@@ -60,8 +79,13 @@ function SchedulePage() {
   },  [fetchData, toggleChecked, data, playPauseStates, username, updatePastTasks, pastTasks])
 
 
+  useEffect(()=>{
+     fetchActiveState()
+  }, [toggleChecked])
+
+
     
-   
+
 
 
   

@@ -6,7 +6,7 @@ import { useState } from "react";
 
 
 function Timer(){
-    const [minutes, setMinutes] = useState(25)
+    const [minutes, setMinutes] = useState(45)
     const [seconds, setSeconds] = useState(0)
 
 
@@ -21,7 +21,7 @@ function Timer(){
     useEffect(()=>{
         if(play){
             if(minutes === 0 && seconds === 0){
-                setMinutes(25)
+                setMinutes(45)
                 setPlay(false)
             }
             else if(seconds === 0){
