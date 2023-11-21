@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
@@ -10,8 +9,8 @@ const port = 3000;
 const tableRoutes = require("./routes/tables")
 const userRoutes = require("./routes/user")
 const messageRoutes = require("./routes/message")
-var router = express.Router()
-const userToId = {}
+const activeRoutes = require("./routes/active")
+
 
 
 // Middleware to parse JSON requests
@@ -20,7 +19,7 @@ app.use(cors())
 // Define a simple route
 app.use("/tables", tableRoutes);
 app.use("/user", userRoutes);
-
+app.use("/active", activeRoutes)
 app.use("/message", messageRoutes)
 // Start the server
 app.listen(port, () => {

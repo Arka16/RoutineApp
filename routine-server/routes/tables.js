@@ -105,49 +105,5 @@ router.put("/del", async (req, res, next)=>{
 })
 
 
-//updating togle value
-router.put("/toggle",  async (req, res) => {
-  console.log("Inside /toggle");
-  console.log(req.body);
-
-  try {
-      console.log(req.body)
-      console.log("In try")
-      const updatedDataModel = await DataModel.findOneAndUpdate(
-        {username: req.body.username},
-        { $set: { activeMode: !req.body.toggleChecked} }, // Use $set to update the field
-        { new: true } // To return the updated document
-      );
-      if (!updatedDataModel) {
-      
-        return res.status(404).json({ error: "Data model not found" });
-      }
-      console.log("After Delete Table");
-      console.log(updatedDataModel)
-      res.status(200).json({ message: 'Data saved successfully.', updatedDataModel });
-  } catch (err) {
-      console.log(req.body)
-      console.error(err);
-      res.status(500).json({ error: 'Failed to save data.' });
-  }
-
-}); 
-
-router.get("/toggle/:username", async (req,res)=>{
-  console.log("inside get /toggle");
-  try {
-    doc = await DataModel.findOne({username: req.params.username})
-    if(doc){
-      res.status(200).send({toggleChecked: doc.activeMode})
-    }
-    else{
-      res.status(404).send("User not found")
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve data' });
-    
-  }
-})
-
 // Export the router
 module.exports = router;

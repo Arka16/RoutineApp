@@ -106,11 +106,11 @@ export function isValidEmail(email) {
     
     setPastTasks(newPastStates);
     setFutureTasks(newFutureStates);
-    console.log("TASK TO MESSAGE IS ");
-    console.log(index);
+    //console.log("TASK TO MESSAGE IS ");
+    //console.log(index);
   
     if (index !== -1 && !playPauseStates[index]) {
-      const reminderInterval = 10 * 1000;
+      const reminderInterval = 5 * 60 * 1000;
       const currentTime = Date.now();
       if (currentTime - lastReminderTime >= reminderInterval) {
         try {

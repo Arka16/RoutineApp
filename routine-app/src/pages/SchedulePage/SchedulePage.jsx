@@ -27,8 +27,8 @@ function SchedulePage() {
   async function  handleToggleChange (){
     setToggleChecked(!toggleChecked);
     try{
-      const data = {username, toggleChecked}
-      await axios.put(URL + "/tables/toggle", data)
+      const data = {username, toggleChecked, curTask, playPauseStates}
+      await axios.put(URL + "/active", data)
     }
     catch(error){
       console.log("Error with toggle update")
@@ -36,11 +36,11 @@ function SchedulePage() {
     }
     
   };
-  console.log(toggleChecked)
+  //console.log(toggleChecked)
   const fetchData = async () => {
     try{
       const response = await axios.get(URL + "/tables/" + username);
-      console.log(response)
+      //console.log(response)
       // console.log("TABLE");
       //onsole.log(response.data.data.table);
       setData(response.data.data.table)
@@ -52,8 +52,15 @@ function SchedulePage() {
 
   const fetchActiveState = async ()=> {
     try {
-      const response = await axios.get(URL + "/tables/toggle/" + username)
+      const response = await axios.get(URL + "/active/" + username)
       setToggleChecked(response.data.toggleChecked)
+      console.log("ACTIVE RESPONSE IS")
+      console.log(response)
+      if(response.data.playPauseStates){
+        setPlayPauseStates(response.data.playPauseStates)
+      }
+     //setPlayPauseStates(response.data.playPauseStates);
+
     } catch (error) {
       console.log(error)
       
@@ -70,18 +77,38 @@ function SchedulePage() {
 
   useEffect(() => {
     fetchData();
+
     setCurTask(playPauseStates.some((state) => typeof state !== "undefined"));
+
+    
+    
     if(toggleChecked && data.length >= 1){
       sendReminder(playPauseStates, username, data, updatePastTasks, updateFutureTasks);
-      console.log("PRINTING PAST TASKS")
-      console.log(pastTasks)
+      // console.log("PRINTING PAST TASKS")
+      // console.log(pastTasks)
     }
   },  [fetchData, toggleChecked, data, playPauseStates, username, updatePastTasks, pastTasks])
 
 
+
   useEffect(()=>{
      fetchActiveState()
-  }, [toggleChecked])
+  }, [toggleChecked, playPauseStates])
+
+
+  // Load playPauseStates from localStorage on component mount
+  useEffect(() => {
+    const storedPlayPauseStates = localStorage.getItem("playPauseStates");
+    if (storedPlayPauseStates) {
+      setPlayPauseStates(JSON.parse(storedPlayPauseStates));
+    }
+  }, []);
+
+  // Save playPauseStates to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("playPauseStates", JSON.stringify(playPauseStates));
+  }, [playPauseStates]);
+
 
 
     
@@ -99,8 +126,8 @@ function SchedulePage() {
     
   };
   function handleEditTable(){
-    console.log("DATA IN SCHEDUE IS")
-    console.log(data)
+    // console.log("DATA IN SCHEDUE IS")
+    // console.log(data)
     navigation("/edit",  {
       state: {
         data,
@@ -118,7 +145,7 @@ function SchedulePage() {
         }
       });
     }
-    console.log(request.status)
+    // console.log(request.status)
     
   }
 
@@ -141,8 +168,8 @@ function SchedulePage() {
         </thead>
         <tbody className="tableEntry" >
           {data.map((row, index) => {
-              console.log("START IS")
-              console.log(row.startTime)
+              // console.log("START IS")
+              // console.log(row.startTime)
               const timeParts1 = row.startTime.split(':');
               const hour1 = parseInt(timeParts1[0]);
               const minute1 = parseInt(timeParts1[1]);
@@ -192,8 +219,8 @@ function SchedulePage() {
                   taskStyle = 'futureStateStyle'
                 }
               }
-              console.log(taskStyle)
-              console.log(pastTasks[index] + "AT INDEX " + index)
+              //console.log(taskStyle)
+              // console.log(pastTasks[index] + "AT INDEX " + index)
               // onClick = {()=> navigation("/entry", {
               //   state: {
               //     task: row.task,
@@ -203,7 +230,7 @@ function SchedulePage() {
               //   }
               // })}
             return (<tr key={index} className={`tableRowStyle ${taskStyle ? taskStyle : ''}`}>
-             <td> {toggleChecked && !pastTasks[index] && !futureTasks[index] && (
+             <td> {toggleChecked && playPauseStates && !pastTasks[index] && !futureTasks[index] && (
   <button onClick={() => handlePlayPause(index)}>
     {playPauseStates[index] ? "⏸️" : "▶️"}
   </button>

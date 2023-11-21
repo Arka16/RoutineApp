@@ -10,7 +10,9 @@ const dataSchema = new mongoose.Schema({
     email: String,
     phoneNumber: String,
     activeMode: Boolean,
-    // playPauseStates: {state: Boolean},
+    playPauseStates: [
+      Boolean
+    ],
     table: [
         {
           time: String,
