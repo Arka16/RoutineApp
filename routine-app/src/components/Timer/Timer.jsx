@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import "./Timer.css"
+import "./Timer.css";
+import TimerOptions from "../TimerOptions/TimerOptions";
+import alarmSound from "../../assets/sounds/mixkit-classic-short-alarm-993.wav";
+
 function Timer() {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
   const [play, setPlay] = useState(false);
-  const [breaks, setBreaks] = useState(false)
-  const [heading, setHeading] = useState("Work")
+  const [breaks, setBreaks] = useState(false);
+  const [heading, setHeading] = useState("Work");
   const [showOptions, setShowOptions] = useState(false);
+  const alarmAudio = new Audio(alarmSound);
 
   const handlePlayPause = () => {
     setPlay(!play);
@@ -20,19 +24,17 @@ function Timer() {
     let timer;
     if (play) {
       if (minutes === 0 && seconds === 0) {
-        if(!breaks){
+        if (!breaks) {
           setMinutes(5);
-          setHeading("Break")
-
+          setHeading("Break");
+        } else {
+          setMinutes(45);
+          setHeading("Work");
         }
-        else{
-          setMinutes(45)
-          setHeading("Work")
 
-        }
-        
         setPlay(false);
-        setBreaks(!breaks)
+        setBreaks(!breaks);
+        alarmAudio.play();
       } else if (seconds === 0) {
         setSeconds(59);
         setMinutes((prev) => prev - 1);
@@ -45,39 +47,29 @@ function Timer() {
   }, [play, minutes, seconds]);
 
   return (
-    <div style={timerContainerStyle}>
-       <button className = "optionsButtonStyle" onClick={handleOptionsClick}>
+    <div className="timer-container">
+      <div className="options-container">
+        <button className="options-button" onClick={handleOptionsClick}>
           ⋮
         </button>
-      <h2 style={timerTextStyle}>
-       {heading}:   {minutes < 10 ? `0${minutes}` : minutes}:
-        {seconds < 10 ? `0${seconds}` : seconds}
-      </h2>
-      <button style={playPauseButtonStyle} onClick={handlePlayPause}>
-        {play ? "⏸️" : "▶️"}
-      </button>
+        <div className="timer-options-container">
+          {showOptions && <TimerOptions onClose={() => setShowOptions(false)} />}
+        </div>
+      </div>
+      <div className="header-container">
+        <h4> {heading}</h4>
+        <h2 className="timer-text">
+          {minutes < 10 ? `0${minutes}` : minutes}:
+          {seconds < 10 ? `0${seconds}` : seconds}
+        </h2>
+      </div>
+      <div className="play-pause-container">
+        <button className="play-pause-button" onClick={handlePlayPause}>
+          {play ? "⏸️" : "▶️"}
+        </button>
+      </div>
     </div>
   );
 }
-
-const timerContainerStyle = {
-  textAlign: "center",
-  margin: "20px",
-  padding: "10px",
-  backgroundColor: "#f0f0f0",
-  borderRadius: "8px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-};
-
-const timerTextStyle = {
-  fontSize: "24px",
-  color: "#333",
-};
-
-const playPauseButtonStyle = {
-  fontSize: "24px",
-  marginLeft: "10px",
-  cursor: "pointer",
-};
 
 export default Timer;

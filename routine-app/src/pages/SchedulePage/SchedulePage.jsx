@@ -156,7 +156,7 @@ function SchedulePage() {
       <div className="toggle-container">
         <Toggle checked={toggleChecked} onChange={handleToggleChange} />
       </div>
-      <h1>Your Schedule</h1>
+      {!toggleChecked && <h1>Your Schedule</h1>}
       {toggleChecked && curTask && <Timer />}
       <table className="task-table">
         <thead>

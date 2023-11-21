@@ -43,20 +43,17 @@ function Settings(props) {
         &#9776; {/* Hamburger icon */}
       </button>
       {isDropdownOpen && (
-        <div className="dropdown-menu">
-          {/* <a className="dropdown-item" href="#option1">
-            Option 1
-          </a>
-          <a className="dropdown-item" href="#option2">
-            Option 2
-          </a> */}
-          <a className="dropdown-item" href="#logout" onClick={handleLogout}>
+        <div className="options-view">
+        <ul>
+          <li><a className="dropdown-item" href="#logout" onClick={handleLogout}>
             Log Out
-          </a>
-          <a className="dropdown-item" href="#logout" onClick={handleDeleteUser}>
+          </a> </li>
+          <li><a className="dropdown-item" href="#logout" onClick={handleDeleteUser}>
             Delete User
-          </a>
-        </div>
+          </a></li>
+          <li onClick={toggleDropdown}>Close</li>
+        </ul>
+      </div>
       )}
     </div>
   );
