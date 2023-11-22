@@ -10,6 +10,8 @@ function Timer() {
   const [breaks, setBreaks] = useState(false);
   const [heading, setHeading] = useState("Work");
   const [showOptions, setShowOptions] = useState(false);
+  const [workDuration, setWorkDuration] = useState(25)
+  const [breakDuration, setBreakDuration] = useState(5)
   const alarmAudio = new Audio(alarmSound);
 
   const handlePlayPause = () => {
@@ -25,10 +27,10 @@ function Timer() {
     if (play) {
       if (minutes === 0 && seconds === 0) {
         if (!breaks) {
-          setMinutes(5);
+          setMinutes(breakDuration);
           setHeading("Break");
         } else {
-          setMinutes(45);
+          setMinutes(workDuration);
           setHeading("Work");
         }
 
@@ -53,7 +55,15 @@ function Timer() {
           ⋮
         </button>
         <div className="timer-options-container">
-          {showOptions && <TimerOptions onClose={() => setShowOptions(false)} />}
+          {showOptions && <TimerOptions 
+          onClose={() => setShowOptions(false)} 
+          play = {play} 
+          setMinutes = {setMinutes} 
+          setSeconds = {setSeconds} 
+          setWorkDuration = {setWorkDuration} 
+          setBreakDuration = {setBreakDuration}
+          breaks = {breaks}
+          />}
         </div>
       </div>
       <div className="header-container">
