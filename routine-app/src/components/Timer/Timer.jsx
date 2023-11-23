@@ -12,6 +12,7 @@ function Timer() {
   const [showOptions, setShowOptions] = useState(false);
   const [workDuration, setWorkDuration] = useState(25)
   const [breakDuration, setBreakDuration] = useState(5)
+  const [started, setStarted] = useState(false)
   const alarmAudio = new Audio(alarmSound);
 
   const handlePlayPause = () => {
@@ -25,7 +26,9 @@ function Timer() {
   useEffect(() => {
     let timer;
     if (play) {
+      setStarted(true)
       if (minutes === 0 && seconds === 0) {
+        setStarted(false)
         if (!breaks) {
           setMinutes(breakDuration);
           setHeading("Break");
@@ -63,6 +66,8 @@ function Timer() {
           setWorkDuration = {setWorkDuration} 
           setBreakDuration = {setBreakDuration}
           breaks = {breaks}
+          started = {started}
+          setShowOptions = {setShowOptions}
           />}
         </div>
       </div>
