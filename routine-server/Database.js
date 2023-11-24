@@ -21,8 +21,20 @@ const dataSchema = new mongoose.Schema({
           startTime: String,
           endTime: String
         },
-      ]
-
+      ],
+    
+    
+    minutes: {
+      type: Number,
+      default: 25
+    },
+    seconds: {
+      type:  Number,
+      default: 0
+    },
+    timerState: Boolean,
+    breaks: Boolean,
+    heading:String
   });
 
   const DataModel = mongoose.model('User_INFO', dataSchema);

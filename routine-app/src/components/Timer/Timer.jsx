@@ -2,27 +2,37 @@ import React, { useEffect, useState } from "react";
 import "./Timer.css";
 import TimerOptions from "../TimerOptions/TimerOptions";
 import alarmSound from "../../assets/sounds/mixkit-classic-short-alarm-993.wav";
+import axios from "axios";
 
-function Timer() {
+function Timer({ username }) {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
   const [play, setPlay] = useState(false);
   const [breaks, setBreaks] = useState(false);
   const [heading, setHeading] = useState("Work");
   const [showOptions, setShowOptions] = useState(false);
-  const [workDuration, setWorkDuration] = useState(25)
-  const [breakDuration, setBreakDuration] = useState(5)
-  const [started, setStarted] = useState(false)
+  const [workDuration, setWorkDuration] = useState(25);
+  const [breakDuration, setBreakDuration] = useState(5);
+  const [started, setStarted] = useState(false);
   const alarmAudio = new Audio(alarmSound);
+  const URL = "http://localhost:3000"
+  // Fetch initial timer data from the server when the component mounts
+  useEffect(() => {
+    axios.get(URL + "/timer/" + username)
+      .then(response => {
+        const { minutes, seconds, timerState, breaks, heading } = response.data;
+        setMinutes(minutes);
+        setSeconds(seconds);
+        setPlay(timerState);
+        setBreaks(breaks);
+        setHeading(heading);
+      })
+      .catch(error => {
+        console.error('Error fetching timer data:', error);
+      });
+  }, [username]);
 
-  const handlePlayPause = () => {
-    setPlay(!play);
-  };
-
-  const handleOptionsClick = () => {
-    setShowOptions(!showOptions);
-  };
-
+  // Update timer data on the server when play/pause is toggled
   useEffect(() => {
     let timer;
     if (play) {
@@ -44,12 +54,43 @@ function Timer() {
         setSeconds(59);
         setMinutes((prev) => prev - 1);
       } else {
-        timer = setTimeout(() => setSeconds((prev) => prev - 1), 1000);
+        // Update timer on the server every second
+        timer = setTimeout(() => {
+          setSeconds((prev) => prev - 1);
+
+          // Send a POST request to update the timer on the server
+          axios.post(URL + '/timer/' + username, {
+            minutes,
+            seconds: seconds - 1,
+            play,
+            breaks,
+            heading
+          })
+            .then(response => {
+              const { minutes, seconds, timerState, breaks, heading } = response.data;
+              setMinutes(minutes);
+              setSeconds(seconds);
+              setPlay(timerState);
+              setBreaks(breaks);
+              setHeading(heading);
+            })
+            .catch(error => {
+              console.error('Error updating timer data:', error);
+            });
+        }, 1000);
       }
     }
     // Clear the timer when the component unmounts or play is toggled off
     return () => clearTimeout(timer);
-  }, [play, minutes, seconds]);
+  }, [play, minutes, seconds, breaks, heading, workDuration, breakDuration, username]);
+
+  const handlePlayPause = () => {
+    setPlay((prevPlay) => !prevPlay);
+  };
+
+  const handleOptionsClick = () => {
+    setShowOptions(!showOptions);
+  };
 
   return (
     <div className="timer-container">
@@ -58,16 +99,20 @@ function Timer() {
           ⋮
         </button>
         <div className="timer-options-container">
-          {showOptions && <TimerOptions 
-          onClose={() => setShowOptions(false)} 
-          play = {play} 
-          setMinutes = {setMinutes} 
-          setSeconds = {setSeconds} 
-          setWorkDuration = {setWorkDuration} 
-          setBreakDuration = {setBreakDuration}
-          breaks = {breaks}
-          started = {started}
-          setShowOptions = {setShowOptions}
+          {showOptions && <TimerOptions
+            onClose={() => setShowOptions(false)}
+            play={play}
+            setMinutes={setMinutes}
+            setSeconds={setSeconds}
+            setWorkDuration={setWorkDuration}
+            setBreakDuration={setBreakDuration}
+            breaks={breaks}
+            started={started}
+            setShowOptions={setShowOptions}
+            setPlay = {setPlay}
+            setStarted = {setStarted}
+            workDuration={workDuration}
+            breakDuration={breakDuration}
           />}
         </div>
       </div>

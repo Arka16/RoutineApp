@@ -10,7 +10,7 @@ const tableRoutes = require("./routes/tables")
 const userRoutes = require("./routes/user")
 const messageRoutes = require("./routes/message")
 const activeRoutes = require("./routes/active")
-
+const timerRoutes = require("./routes/timer")
 
 
 // Middleware to parse JSON requests
@@ -21,6 +21,7 @@ app.use("/tables", tableRoutes);
 app.use("/user", userRoutes);
 app.use("/active", activeRoutes)
 app.use("/message", messageRoutes)
+app.use("/timer", timerRoutes)
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
