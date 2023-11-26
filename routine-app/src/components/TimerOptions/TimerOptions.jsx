@@ -3,10 +3,10 @@ import './TimerOptions.css';
 import WorkDurationOptions from './WorkDurationOptions';
 import BreakDurationOptions from './BreakDurationOptions';
 
-const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, setBreakDuration, breaks, started, setShowOptions, setPlay, setStarted, workDuration, breakDuration }) => {
+const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, setBreakDuration, breaks, started, setShowOptions, setPlay, setStarted, workDuration, breakDuration, selectedWorkOption, setSelectedWorkOption, selectedBreakOption, setSelectedBreakOption }) => {
   const [workHover, setWorkHover] = useState(false);
   const [breakHover, setBreakHover] = useState(false);
-  
+ 
 
   function handleTimeReset() {
     if (started) {
@@ -40,7 +40,10 @@ const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWor
               setWorkDuration={setWorkDuration} 
               breaks = {breaks} 
               started = {started} 
-              setShowOptions = {setShowOptions} />
+              setShowOptions = {setShowOptions} 
+              selectedOption = {selectedWorkOption}
+              setSelectedOption = {setSelectedWorkOption}
+              />
             </div>
           )}
         </li>
@@ -56,6 +59,8 @@ const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWor
               breaks = {breaks} 
               started = {started} 
               setShowOptions = {setShowOptions}
+              selectedOption = {selectedBreakOption}
+              setSelectedOption = {setSelectedBreakOption}
               />
             </div>
           )}

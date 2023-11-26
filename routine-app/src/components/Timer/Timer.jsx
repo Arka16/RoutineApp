@@ -14,6 +14,8 @@ function Timer({ username }) {
   const [workDuration, setWorkDuration] = useState(25);
   const [breakDuration, setBreakDuration] = useState(5);
   const [started, setStarted] = useState(false);
+  const [selectedWorkOption, setSelectedWorkOption] = useState(3); 
+  const [selectedBreakOption, setSelectedBreakOption] = useState(1); 
   const alarmAudio = new Audio(alarmSound);
   const URL = "http://localhost:3000"
   // Fetch initial timer data from the server when the component mounts
@@ -38,6 +40,9 @@ function Timer({ username }) {
     if (play) {
       setStarted(true)
       if (minutes === 0 && seconds === 0) {
+        if(started){
+          alarmAudio.play();
+        } 
         setStarted(false)
         if (!breaks) {
           setMinutes(breakDuration);
@@ -49,7 +54,7 @@ function Timer({ username }) {
 
         setPlay(false);
         setBreaks(!breaks);
-        alarmAudio.play();
+        
       } else if (seconds === 0) {
         setSeconds(59);
         setMinutes((prev) => prev - 1);
@@ -62,18 +67,18 @@ function Timer({ username }) {
           axios.post(URL + '/timer/' + username, {
             minutes,
             seconds: seconds - 1,
-            play,
+            timerState: play,
             breaks,
             heading
           })
-            .then(response => {
-              const { minutes, seconds, timerState, breaks, heading } = response.data;
-              setMinutes(minutes);
-              setSeconds(seconds);
-              setPlay(timerState);
-              setBreaks(breaks);
-              setHeading(heading);
-            })
+            // .then(response => {
+            //   const { minutes, seconds, timerState, breaks, heading } = response.data;
+            //   setMinutes(minutes);
+            //   setSeconds(seconds);
+            //   setPlay(timerState);
+            //   setBreaks(breaks);
+            //   setHeading(heading);
+            // })
             .catch(error => {
               console.error('Error updating timer data:', error);
             });
@@ -113,6 +118,10 @@ function Timer({ username }) {
             setStarted = {setStarted}
             workDuration={workDuration}
             breakDuration={breakDuration}
+            selectedWorkOption={selectedWorkOption}
+            setSelectedWorkOption={setSelectedWorkOption}
+            selectedBreakOption = {selectedBreakOption}
+            setSelectedBreakOption = {setSelectedBreakOption}
           />}
         </div>
       </div>

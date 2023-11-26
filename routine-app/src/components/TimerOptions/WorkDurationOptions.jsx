@@ -1,31 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './TimerOptions.css';
 
+const WorkDurationOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, breaks, started, setShowOptions, selectedOption, setSelectedOption }) => {
+  const options = [
+    { min: 0, sec: 2, label: '2 sec' },
+    { min: 0, sec: 15, label: '15 minutes' },
+    { min: 20, sec: 0, label: '20 minutes' },
+    { min: 25, sec: 0, label: '25 minutes' },
+    { min: 30, sec: 0, label: '30 minutes' },
+    { min: 45, sec: 0, label: '45 minutes' },
+    { min: 60, sec: 0, label: '60 minutes' },
+    { min: 75, sec: 0, label: '75 minutes' },
+    { min: 90, sec: 0, label: '90 minutes' },
+  ];
 
-const WorkDurationOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, breaks, started, setShowOptions }) => {
-
-  function handleTimeChange(min, sec){
-    if(!breaks && !play && !started){
-        setMinutes(min)
-        setSeconds(sec)
+  useEffect(() => {
+    // Set the initial selected option based on the prop
+    if (selectedOption === undefined) {
+      setSelectedOption(3); // Default to the fourth option (25 minutes)
     }
-  
-    setWorkDuration(min)
-    setShowOptions(false)
-  }
+  }, [selectedOption, setSelectedOption]);
+
+  const handleTimeChange = (index) => {
+    if (!breaks && !play && !started) {
+      setMinutes(options[index].min);
+      setSeconds(options[index].sec);
+    }
+
+    setWorkDuration(options[index].min);
+    setShowOptions(false);
+    setSelectedOption(index);
+  };
+
   return (
     <div className="options-view" style={{ top, left }}>
       <ul>
-      <li className="solid-white-background" onClick = {()=>handleTimeChange(0, 2)}> 2 sec</li>
-        <li className="solid-white-background"  onClick = {()=>handleTimeChange(0, 15)}>15 minutes</li>
-        <li className="solid-white-background" onClick = {()=>handleTimeChange(20, 0)}> 20 minutes </li>
-        <li className="solid-white-background" onClick = {()=>handleTimeChange(25, 0)}> 25 minutes </li>
-        <li className="solid-white-background" onClick = {()=>handleTimeChange(30, 0)}>30 minutes </li>
-        <li className="solid-white-background" onClick = {()=>handleTimeChange(45, 0)}>45 minutes</li>
-        <li className="solid-white-background" onClick = {()=>handleTimeChange(60, 0)}>60 minutes </li>
-        <li className="solid-white-background" onClick = {()=>handleTimeChange(75, 0)}> 75 minutes </li>
-        <li className="solid-white-background" onClick = {()=>handleTimeChange(90, 0)}> 90 minutes </li>
-        <li className="solid-white-background" onClick={onClose}>Close</li>
+        {options.map((option, index) => (
+          <li key={index} className="solid-white-background" onClick={() => handleTimeChange(index)}>
+            {selectedOption === index && '√'} {option.label}
+          </li>
+        ))}
+        <li className="solid-white-background" onClick={onClose}>
+          Close
+        </li>
       </ul>
     </div>
   );
