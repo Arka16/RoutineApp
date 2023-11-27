@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import './TimerOptions.css';
+import axios from "axios";
 
-const WorkDurationOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, breaks, started, setShowOptions, selectedOption, setSelectedOption }) => {
+const WorkDurationOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, breaks, started, setShowOptions, selectedOption, setSelectedOption, username }) => {
+  const URL = "http://localhost:3000";
   const options = [
     { min: 0, sec: 2, label: '2 sec' },
     { min: 0, sec: 15, label: '15 minutes' },
@@ -13,15 +15,13 @@ const WorkDurationOptions = ({ top, left, onClose, play, setMinutes, setSeconds,
     { min: 75, sec: 0, label: '75 minutes' },
     { min: 90, sec: 0, label: '90 minutes' },
   ];
+ 
+  async function updateWorkOptions(index) {
+    const data = { username, selectBreakOption: index };
+    await axios.post(URL + "/timer/options1", data);
+  }
 
-  useEffect(() => {
-    // Set the initial selected option based on the prop
-    if (selectedOption === undefined) {
-      setSelectedOption(3); // Default to the fourth option (25 minutes)
-    }
-  }, [selectedOption, setSelectedOption]);
-
-  const handleTimeChange = (index) => {
+  const handleTimeChange = async (index) => {
     if (!breaks && !play && !started) {
       setMinutes(options[index].min);
       setSeconds(options[index].sec);
@@ -30,6 +30,16 @@ const WorkDurationOptions = ({ top, left, onClose, play, setMinutes, setSeconds,
     setWorkDuration(options[index].min);
     setShowOptions(false);
     setSelectedOption(index);
+
+    try {
+      const data = { username, selectedWorkOption: index };
+      console.log("Sending data:", data);
+  
+      const response = await axios.post(URL + "/timer/options1", data);
+      console.log("Response from server:", response.data);
+    } catch (error) {
+      console.error("Error updating break options:", error);
+    }
   };
 
   return (

@@ -33,7 +33,17 @@ function Timer({ username }) {
         console.error('Error fetching timer data:', error);
       });
   }, [username]);
-
+  useEffect(()=>{
+    axios.get(URL + "/timer/options/" + username)
+    .then(response => {
+      const {selectedWorkOption, selectedBreakOption} = response.data;
+      setSelectedWorkOption(selectedWorkOption)
+      setSelectedBreakOption(selectedBreakOption)
+    })
+    .catch(error =>{
+      console.log("error fetching data from options: ", error)
+    })
+  }, [selectedBreakOption, selectedWorkOption])
   // Update timer data on the server when play/pause is toggled
   useEffect(() => {
     let timer;
@@ -122,6 +132,7 @@ function Timer({ username }) {
             setSelectedWorkOption={setSelectedWorkOption}
             selectedBreakOption = {selectedBreakOption}
             setSelectedBreakOption = {setSelectedBreakOption}
+            username = {username}
           />}
         </div>
       </div>

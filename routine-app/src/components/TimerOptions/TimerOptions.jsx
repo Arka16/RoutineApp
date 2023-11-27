@@ -3,7 +3,7 @@ import './TimerOptions.css';
 import WorkDurationOptions from './WorkDurationOptions';
 import BreakDurationOptions from './BreakDurationOptions';
 
-const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, setBreakDuration, breaks, started, setShowOptions, setPlay, setStarted, workDuration, breakDuration, selectedWorkOption, setSelectedWorkOption, selectedBreakOption, setSelectedBreakOption }) => {
+const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWorkDuration, setBreakDuration, breaks, started, setShowOptions, setPlay, setStarted, workDuration, breakDuration, selectedWorkOption, setSelectedWorkOption, selectedBreakOption, setSelectedBreakOption, username }) => {
   const [workHover, setWorkHover] = useState(false);
   const [breakHover, setBreakHover] = useState(false);
  
@@ -43,6 +43,7 @@ const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWor
               setShowOptions = {setShowOptions} 
               selectedOption = {selectedWorkOption}
               setSelectedOption = {setSelectedWorkOption}
+              username = {username}
               />
             </div>
           )}
@@ -61,6 +62,7 @@ const TimerOptions = ({ top, left, onClose, play, setMinutes, setSeconds, setWor
               setShowOptions = {setShowOptions}
               selectedOption = {selectedBreakOption}
               setSelectedOption = {setSelectedBreakOption}
+              username = {username}
               />
             </div>
           )}

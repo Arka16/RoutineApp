@@ -34,7 +34,16 @@ const dataSchema = new mongoose.Schema({
     },
     timerState: Boolean,
     breaks: Boolean,
-    heading:String
+    heading:String,
+    selectedWorkOption: {
+      type: Number,
+      default: 3
+    },
+    selectedBreakOption: {
+      type: Number,
+      default: 1
+    },
+
   });
 
   const DataModel = mongoose.model('User_INFO', dataSchema);
