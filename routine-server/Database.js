@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true})
+const crypto = require('crypto')
+var encrypt = require('mongoose-encryption')
 const db = mongoose.connection;
+
+
+
 
 const dataSchema = new mongoose.Schema({
     // Define the structure of your data here
@@ -45,6 +50,11 @@ const dataSchema = new mongoose.Schema({
     },
 
   });
+
+  const secret = process.env.SECRET;
+
+
+  //dataSchema.plugin(encrypt, {secret: secret, encryptedFields: ["password"]});
 
   const DataModel = mongoose.model('User_INFO', dataSchema);
   module.exports = DataModel

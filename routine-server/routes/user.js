@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 const DataModel = require("../Database");
+const bcrypt = require("bcrypt")
+const saltRounds = 10
 //getting user id
 router.get('/', async (req, res) => {
     console.log("getting user")
@@ -23,68 +25,67 @@ router.get('/', async (req, res) => {
 });
 
 
-//creating user for the first time
 router.post("/", async (req, res) => {
-    console.log("account info entered");
-    console.log(req.body)
-    try{
-      const userInfo = new DataModel({
-        ...req.body
-    });
-   
-      console.log(userInfo)
-      const data = await userInfo.save();   
-      const dataModelId = userInfo._id;
-      console.log("ASDF")
-      res.status(201).json({_id: dataModelId,  message: 'Data saved successfully.'});
+  console.log("account info entered");
+  console.log(req.body);
 
-    }
-    catch(error){
-      console.log(req.body)
+  try {
+      // Hash the user's password before saving it to the database
+      const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+
+      const userInfo = new DataModel({
+          // Spread the request body and replace the password with the hashed version
+          ...req.body,
+          password: hashedPassword
+      });
+
+      console.log(userInfo);
+
+      const data = await userInfo.save();
+      const dataModelId = userInfo._id;
+      console.log("ASDF");
+      res.status(201).json({ _id: dataModelId, message: 'Data saved successfully.' });
+  } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Failed to save data.' });
-    }
-
+  }
 });
 
 //user logging in, lets user in if correct password is entered or if user exists
+
 router.post("/login", async (req, res, next) => {
-  console.log("getting user in POST enpoint")
+  console.log("getting user in POST endpoint")
   console.log(req.body)
-  try{
-    //const id = userToId[req.body.username]
-    console.log(req.body)
-    console.log("Password from request is " + req.body.password)
-   
-    doc = await DataModel.findOne({username: req.body.username})
-    console.log("DOC IS")
-    console.log(doc)
-    const data = {}
-    if(doc){
-      data["message1"] = "Username already exists"
 
+  try {
+    const doc = await DataModel.findOne({ username: req.body.username });
+
+    const data = {};
+
+    if (!doc) {
+      data["message"] = "Invalid username or password";
+      res.json(data);
+    } else {
+      const passwordMatch = await bcrypt.compare(req.body.password, doc.password);
+
+      if (passwordMatch) {
+        res.status(200).json({
+          message1: "Username already exists",
+          username: req.body.username,
+          tableExists: doc.table.length !== 0,
+        });
+      } else {
+        data["message"] = "Invalid username or password";
+        res.json(data);
+      }
     }
-
-    if (!doc || doc.password !== req.body.password) {
-      console.log("ASDFADSFDS")
-      data["message"] = "Invalid username or password"
-      console.log(data)
-      res.json(data)
-    } 
-  
-    
-    else {
-      res.status(200).json({"message1" : "Username already exists", username: req.body.username, tableExists: (doc.table.length != 0)})
-      
-    }
-
-  }
-  catch(err){
+  } catch (err) {
     console.error('Error:', err);
-
+    res.status(500).json({ error: 'Internal server error' });
   }
-  next()
-})
+  next();
+});
+
 
 //deleting a user
 router.delete("/", async (req, res, next) => {
