@@ -96,7 +96,8 @@ function CreateAccount(){
               email: email,
               phoneNumber: phoneNumber,
           }
-          const response = await axios.post(URL + "/user", data); 
+          // const response = await axios.post(URL + "/user", data); 
+          const response = await axios.post(URL + "/user/register", data); 
           console.log(response.status)
           console.log('Response from the server:', response.data);
           navigation("/createTable", {

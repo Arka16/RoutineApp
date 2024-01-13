@@ -1,9 +1,20 @@
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const cors = require('cors');
 const app = express();
 const port = 3000;
 
+app.use(session({
+  secret: "Our little secret.",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 const tableRoutes = require("./routes/tables")

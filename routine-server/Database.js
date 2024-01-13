@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true})
-const crypto = require('crypto')
-var encrypt = require('mongoose-encryption')
+// mongoose.set("useCreateIndex",true)
+const passportLocalMongoose = require("passport-local-mongoose")
+const passport = require('passport');
 const db = mongoose.connection;
 
 
@@ -10,7 +11,7 @@ const db = mongoose.connection;
 const dataSchema = new mongoose.Schema({
     // Define the structure of your data here
     name: String,
-    username: String,
+    username: { type: String, unique: true },
     password: String,
     email: String,
     phoneNumber: String,
@@ -50,11 +51,15 @@ const dataSchema = new mongoose.Schema({
     },
 
   });
-
-  const secret = process.env.SECRET;
+  dataSchema.plugin(passportLocalMongoose)
+  // const secret = process.env.SECRET;
 
 
   //dataSchema.plugin(encrypt, {secret: secret, encryptedFields: ["password"]});
 
   const DataModel = mongoose.model('User_INFO', dataSchema);
+  passport.use(DataModel.createStrategy())
+  passport.serializeUser(DataModel.serializeUser());
+  passport.deserializeUser(DataModel.deserializeUser());
+
   module.exports = DataModel

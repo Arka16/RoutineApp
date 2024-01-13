@@ -157,7 +157,7 @@ function SchedulePage() {
         <Toggle checked={toggleChecked} onChange={handleToggleChange} />
       </div>
       {!toggleChecked && <h1>Your Schedule</h1>}
-      {toggleChecked && curTask && <Timer username = {username}/>}
+      {toggleChecked && <Timer username = {username}/>}
       <table className="task-table">
         <thead>
           <tr>
