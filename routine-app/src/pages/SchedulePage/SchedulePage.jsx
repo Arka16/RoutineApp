@@ -18,6 +18,7 @@ function SchedulePage() {
   const [pastTasks, setPastTasks] = useState(new Array(data.length).fill(false))
   const [futureTasks, setFutureTasks] = useState({})
   const [curTask, setCurTask] = useState(false)
+  const [closeTimer, setCloseTimer] = useState(false)
   const URL = "http://localhost:3000"
 
 
@@ -157,7 +158,8 @@ function SchedulePage() {
         <Toggle checked={toggleChecked} onChange={handleToggleChange} />
       </div>
       {!toggleChecked && <h1>Your Schedule</h1>}
-      {toggleChecked && <Timer username = {username}/>}
+      {toggleChecked && closeTimer && <button onClick={()=>setCloseTimer(false)}> Open Timer </button>}
+      {toggleChecked && !closeTimer && <Timer username = {username} setCloseTimer =  {setCloseTimer}/>}
       <table className="task-table">
         <thead>
           <tr>

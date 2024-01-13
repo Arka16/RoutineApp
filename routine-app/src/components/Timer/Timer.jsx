@@ -4,13 +4,14 @@ import TimerOptions from "../TimerOptions/TimerOptions";
 import alarmSound from "../../assets/sounds/mixkit-classic-short-alarm-993.wav";
 import axios from "axios";
 
-function Timer({ username }) {
+function Timer({ username, setCloseTimer }) {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
   const [play, setPlay] = useState(false);
   const [breaks, setBreaks] = useState(false);
   const [heading, setHeading] = useState("Work");
   const [showOptions, setShowOptions] = useState(false);
+  
   const [workDuration, setWorkDuration] = useState(25);
   const [breakDuration, setBreakDuration] = useState(5);
   const [started, setStarted] = useState(false);
@@ -132,6 +133,7 @@ function Timer({ username }) {
             setSelectedWorkOption={setSelectedWorkOption}
             selectedBreakOption = {selectedBreakOption}
             setSelectedBreakOption = {setSelectedBreakOption}
+            setCloseTimer = {setCloseTimer}
             username = {username}
           />}
         </div>
