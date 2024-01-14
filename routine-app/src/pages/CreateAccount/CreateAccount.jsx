@@ -66,7 +66,7 @@ function CreateAccount(){
 
     async function handleLogin(e) {
       e.preventDefault();
-      const response = await axios.post(URL + "/user/login", {username, password})
+      //const response = await axios.post(URL + "/user/login", {username, password})
       
       if(!name || !username || !password || !email || !phoneNumber || !repassword){
         setMessage("Not all entries filled")
@@ -80,9 +80,9 @@ function CreateAccount(){
       else if(!isValidPhoneNumber(phoneNumber)){
         setPhoneMessage("Invalid Phone Number")
       }
-      else if(response.data['message1']){
-        setMessage(response.data['message1'])
-      }
+      // else if(response.data['message1']){
+      //   setMessage(response.data['message1'])
+      // }
       
       else{
 
